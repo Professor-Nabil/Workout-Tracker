@@ -63,3 +63,17 @@ class Workouts_Progress {
   }
 }
 
+/* ==========================================================================================
+ * Database
+ * */
+
+const Database = {
+  User: [],
+  Category: [],
+  Exercise: [],
+  Exercise_Plan: [],
+  Plan_Status: [],
+  Workout_Plans: [],
+  Workouts_Progress: [],
+};
+
