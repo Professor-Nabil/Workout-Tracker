@@ -94,3 +94,49 @@ const __dirname = path.dirname(__filename);
     Database.Exercise.push(elm);
   });
 }
+
+/* ==========================================================================================
+ * API
+ * */
+
+class Request {
+  constructor(method, url, body) {
+    this.method = method;
+    this.url = url;
+    this.body = body;
+  }
+}
+class Response {
+  constructor(status, body) {
+    this.status = status;
+    this.body = body;
+  }
+}
+
+function view(reqMsg, resMsg) {
+  console.log("=".repeat(100));
+  console.log(reqMsg);
+  console.log("-".repeat(100));
+  console.log(resMsg);
+  console.log();
+}
+
+function curl(request) {
+  if (request.method === "POST" && request.url === "/user") {
+    const { name } = request.body;
+    const generateId = Database.User.length + 1;
+    const newUser = new User(generateId, name);
+
+    Database.User.push(newUser);
+
+    view(
+      request,
+      new Response(201, {
+        user: newUser,
+        msg: "Success: Create new user",
+      }),
+    );
+  }
+}
+
+curl(new Request("POST", "/user", { name: "Nabil" }));
