@@ -1,6 +1,25 @@
 {
-  "scripts": {
-    "start": "node app.js"
+  "name": "workout-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github-tester:Professor-Nabil/Workout-Tracker.git"
   },
-  "type": "module"
+  "scripts": {
+    "start": "tsx ./src/app.ts",
+    "dev": "tsx watch ./src/app.ts",
+    "check": "tsc --noEmit",
+    "clear:ckeck:start": "clear && tsc --noEmit && tsx ./src/app.ts",
+    "tree": "clear; tree -I node_modules -I .git -I wiki -a"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
