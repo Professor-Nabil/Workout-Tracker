@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Squat",
+    "description": "Lowering the hips from a standing position and then standing back up while keeping the back straight",
+    "category": "Lower Body"
+  },
+  {
+    "name": "Bench Press",
+    "description": "Lying flat on a bench and pressing a weight",
+    "category": "Upper Body"
+  },
+  {
+    "name": "Deadlift",
+    "description": "Lifting a weighted barbell from the floor to hip level while maintaining a flat back",
+    "category": "Full Body"
+  },
+  {
+    "name": "Pull-Up",
+    "description": "Pulling the body upward while hanging from a horizontal bar until the chin passes the bar",
+    "category": "Upper Body"
+  },
+  {
+    "name": "Plank",
+    "description": "Holding a position similar to a push-up while resting on your forearms or hands",
+    "category": "Core"
+  },
+  {
+    "name": "Running",
+    "description": "A high-intensity gait where both feet are briefly off the ground at the same time",
+    "category": "Aerobic"
+  },
+  {
+    "name": "Burpees",
+    "description": "A four-point movement squat, kick feet back into a plank, perform a push-up, jump feet back to squat, and jump into the air",
+    "category": "Full Body"
+  },
+  {
+    "name": "Cycling",
+    "description": "Using a stationary or outdoor bicycle to pedal at various intensities to improve heart health",
+    "category": "Aerobic"
+  },
+  {
+    "name": "Jump Rope",
+    "description": "Swinging a rope over the head and under the feet repeatedly",
+    "category": "Aerobic"
+  },
+  {
+    "name": "Static Stretch",
+    "description": "Holding a muscle in a lengthened position for 30–90 seconds to reduce tightness",
+    "category": "Flexibility"
+  },
+  {
+    "name": "Single-Leg Stand",
+    "description": "Standing on one foot while maintaining an upright posture to improve neurological stability",
+    "category": "Balance"
+  },
+  {
+    "name": "Downward Dog",
+    "description": "A yoga pose forming an inverted 'V' shape with the body to stretch the hamstrings",
+    "category": "Flexibility"
+  }
+]
