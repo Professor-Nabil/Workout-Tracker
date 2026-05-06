@@ -77,3 +77,20 @@ const Database = {
   Workouts_Progress: [],
 };
 
+/* ==========================================================================================
+ * Database Seeding
+ * */
+
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+{
+  const filePath = path.join(__dirname, "./wiki/Database-Seeding.json");
+  const rawData = fs.readFileSync(filePath, "utf-8");
+  const exercises = JSON.parse(rawData);
+  exercises.forEach((elm) => {
+    Database.Exercise.push(elm);
+  });
+}
