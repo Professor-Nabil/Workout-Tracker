@@ -1,0 +1,97 @@
+# Models
+
+```prisma
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  workouts      Workout[]
+  measurements  BodyMeasurement[]
+  refreshTokens RefreshToken[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  isRevoked Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model BodyMeasurement {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  weight    Float
+  date      DateTime @default(now())
+  notes     String?
+}
+
+model ExerciseCategory {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  exercises Exercise[]
+}
+
+model Exercise {
+  id            String           @id @default(uuid())
+  name          String
+  description   String?
+  isSystem      Boolean          @default(true) // Distinguish seed data from user-created
+  ownerId       String?
+  owner         User?            @relation(fields: [ownerId], references: [id])
+  categoryId    String
+  category      ExerciseCategory @relation(fields: [categoryId], references: [id])
+  muscleGroup   String?
+  workoutItems  WorkoutExercise[]
+}
+
+enum WorkoutStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Workout {
+  id          String            @id @default(uuid())
+  title       String
+  status      WorkoutStatus     @default(PLANNED)
+  scheduledAt DateTime
+  startedAt   DateTime?
+  endedAt     DateTime?
+  comments    String?
+  deletedAt   DateTime?
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+  exercises   WorkoutExercise[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([userId, scheduledAt])
+}
+
+enum WeightUnit {
+  KG
+  LBS
+}
+
+model WorkoutExercise {
+  id          String      @id @default(uuid())
+  workoutId   String
+  exerciseId  String
+  sequence    Int         @default(1) // Order of the set/exercise in the workout
+  sets        Int?
+  reps        Int?
+  weight      Float?
+  weightUnit  WeightUnit? @default(KG)
+  duration    Int?        // Duration in minutes
+  isCompleted Boolean     @default(false)
+  workout     Workout     @relation(fields: [workoutId], references: [id])
+  exercise    Exercise    @relation(fields: [exerciseId], references: [id])
+}
+```
