@@ -1,0 +1,10 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/client" // Recommended: Keep generated types in your src
+}
+
+datasource db {
+  provider = "mysql"
+}
