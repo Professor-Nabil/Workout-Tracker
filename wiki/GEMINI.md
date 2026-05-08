@@ -28,6 +28,7 @@ This file serves as the context source for Gemini CLI agents to maintain project
 4. **Logging**: Maintain structured JSON logs; PII must be redacted.
 5. **Git Workflow**: Descriptive commit messages.
 6. **Environment**: Validate via `zod` on startup.
+7. **Quality Control**: **EVERY TIME after you write or modify any code, you MUST run `npm run lint && npm run check && npm test` to ensure stability and quality.**
 
 ## Implementation Guidelines
 
