@@ -6,6 +6,7 @@ This document outlines the core technology stack and architectural patterns for 
 
 - **Language**: TypeScript
 - **Runtime/Tools**: Node.js, `tsx` (for execution), `tsc` (for type checking)
+- **Linting**: `eslint`
 - **Database**: Local MariaDB
 - **ORM**: Prisma
 - **Environment Management**: `dotenv`, `zod` (for runtime environment validation)
@@ -49,6 +50,11 @@ This document outlines the core technology stack and architectural patterns for 
 - **Git**: Always use descriptive, actionable commit messages.
 - **Workflow**: Terminal-first approach using `tmux`, `Neovim`.
 - **Validation**: `tsc --noEmit` check on every build; strictly typed API contracts.
+
+## API Documentation
+
+- **Strategy**: Maintain OpenAPI/Swagger documentation to provide clear API contracts.
+- **Implementation**: Utilize `swagger-ui-express` and `zod-to-openapi` to automatically generate documentation from Zod schemas, ensuring sync between API code and docs.
 
 ## Logging Strategy
 
