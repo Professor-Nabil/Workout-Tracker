@@ -11,4 +11,14 @@ export class AuthService {
       },
     });
   }
+
+  async login(email: string, password: string) {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) throw new Error('Invalid credentials');
+
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) throw new Error('Invalid credentials');
+
+    return user;
+  }
 }
