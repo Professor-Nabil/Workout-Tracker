@@ -17,4 +17,38 @@ import * as Prisma from './internal/prismaNamespaceBrowser.js'
 export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
-
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model RefreshToken
+ * 
+ */
+export type RefreshToken = Prisma.RefreshTokenModel
+/**
+ * Model BodyMeasurement
+ * 
+ */
+export type BodyMeasurement = Prisma.BodyMeasurementModel
+/**
+ * Model ExerciseCategory
+ * 
+ */
+export type ExerciseCategory = Prisma.ExerciseCategoryModel
+/**
+ * Model Exercise
+ * 
+ */
+export type Exercise = Prisma.ExerciseModel
+/**
+ * Model Workout
+ * 
+ */
+export type Workout = Prisma.WorkoutModel
+/**
+ * Model WorkoutExercise
+ * 
+ */
+export type WorkoutExercise = Prisma.WorkoutExerciseModel

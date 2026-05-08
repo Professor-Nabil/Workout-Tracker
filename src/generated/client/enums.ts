@@ -9,7 +9,19 @@
 * 🟢 You can import this file directly.
 */
 
+export const WorkoutStatus = {
+  PLANNED: 'PLANNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type WorkoutStatus = (typeof WorkoutStatus)[keyof typeof WorkoutStatus]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const WeightUnit = {
+  KG: 'KG',
+  LBS: 'LBS'
+} as const
+
+export type WeightUnit = (typeof WeightUnit)[keyof typeof WeightUnit]

@@ -51,7 +51,13 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-
+  User: 'User',
+  RefreshToken: 'RefreshToken',
+  BodyMeasurement: 'BodyMeasurement',
+  ExerciseCategory: 'ExerciseCategory',
+  Exercise: 'Exercise',
+  Workout: 'Workout',
+  WorkoutExercise: 'WorkoutExercise'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -68,4 +74,174 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  isRevoked: 'isRevoked',
+  createdAt: 'createdAt'
+} as const
+
+export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
+
+
+export const BodyMeasurementScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  weight: 'weight',
+  date: 'date',
+  notes: 'notes'
+} as const
+
+export type BodyMeasurementScalarFieldEnum = (typeof BodyMeasurementScalarFieldEnum)[keyof typeof BodyMeasurementScalarFieldEnum]
+
+
+export const ExerciseCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type ExerciseCategoryScalarFieldEnum = (typeof ExerciseCategoryScalarFieldEnum)[keyof typeof ExerciseCategoryScalarFieldEnum]
+
+
+export const ExerciseScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  isSystem: 'isSystem',
+  ownerId: 'ownerId',
+  categoryId: 'categoryId',
+  muscleGroup: 'muscleGroup'
+} as const
+
+export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
+
+
+export const WorkoutScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  status: 'status',
+  scheduledAt: 'scheduledAt',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  comments: 'comments',
+  deletedAt: 'deletedAt',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkoutScalarFieldEnum = (typeof WorkoutScalarFieldEnum)[keyof typeof WorkoutScalarFieldEnum]
+
+
+export const WorkoutExerciseScalarFieldEnum = {
+  id: 'id',
+  workoutId: 'workoutId',
+  exerciseId: 'exerciseId',
+  sequence: 'sequence',
+  sets: 'sets',
+  reps: 'reps',
+  weight: 'weight',
+  weightUnit: 'weightUnit',
+  duration: 'duration',
+  isCompleted: 'isCompleted'
+} as const
+
+export type WorkoutExerciseScalarFieldEnum = (typeof WorkoutExerciseScalarFieldEnum)[keyof typeof WorkoutExerciseScalarFieldEnum]
+
+
+export const SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+} as const
+
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const UserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password: 'password'
+} as const
+
+export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
+export const RefreshTokenOrderByRelevanceFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId'
+} as const
+
+export type RefreshTokenOrderByRelevanceFieldEnum = (typeof RefreshTokenOrderByRelevanceFieldEnum)[keyof typeof RefreshTokenOrderByRelevanceFieldEnum]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const BodyMeasurementOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  notes: 'notes'
+} as const
+
+export type BodyMeasurementOrderByRelevanceFieldEnum = (typeof BodyMeasurementOrderByRelevanceFieldEnum)[keyof typeof BodyMeasurementOrderByRelevanceFieldEnum]
+
+
+export const ExerciseCategoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type ExerciseCategoryOrderByRelevanceFieldEnum = (typeof ExerciseCategoryOrderByRelevanceFieldEnum)[keyof typeof ExerciseCategoryOrderByRelevanceFieldEnum]
+
+
+export const ExerciseOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  ownerId: 'ownerId',
+  categoryId: 'categoryId',
+  muscleGroup: 'muscleGroup'
+} as const
+
+export type ExerciseOrderByRelevanceFieldEnum = (typeof ExerciseOrderByRelevanceFieldEnum)[keyof typeof ExerciseOrderByRelevanceFieldEnum]
+
+
+export const WorkoutOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  comments: 'comments',
+  userId: 'userId'
+} as const
+
+export type WorkoutOrderByRelevanceFieldEnum = (typeof WorkoutOrderByRelevanceFieldEnum)[keyof typeof WorkoutOrderByRelevanceFieldEnum]
+
+
+export const WorkoutExerciseOrderByRelevanceFieldEnum = {
+  id: 'id',
+  workoutId: 'workoutId',
+  exerciseId: 'exerciseId'
+} as const
+
+export type WorkoutExerciseOrderByRelevanceFieldEnum = (typeof WorkoutExerciseOrderByRelevanceFieldEnum)[keyof typeof WorkoutExerciseOrderByRelevanceFieldEnum]
 

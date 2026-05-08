@@ -8,4 +8,11 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/User.js'
+export type * from './models/RefreshToken.js'
+export type * from './models/BodyMeasurement.js'
+export type * from './models/ExerciseCategory.js'
+export type * from './models/Exercise.js'
+export type * from './models/Workout.js'
+export type * from './models/WorkoutExercise.js'
 export type * from './commonInputTypes.js'
