@@ -3,7 +3,9 @@ import { AuthService } from "../../src/services/auth.service.js";
 import { prisma } from "../../src/lib/db.js";
 import bcrypt from "bcrypt";
 import type { User } from "../../src/generated/client/client.js";
+import { AuthenticationError } from "../../src/lib/errors.js";
 
+// Mocking dependencies
 vi.mock("../../src/lib/db.js", () => ({
   prisma: {
     user: {
@@ -29,7 +31,7 @@ describe("AuthService", () => {
     const hashedPassword = "hashedPassword";
 
     vi.mocked(bcrypt.hash).mockResolvedValue(hashedPassword as never);
-    
+
     const mockUser: User = {
       id: "user-123",
       email,
@@ -53,7 +55,7 @@ describe("AuthService", () => {
     const email = "test@example.com";
     const password = "password123";
     const hashedPassword = "hashedPassword";
-    
+
     const mockUser: User = {
       id: "user-123",
       email,
@@ -70,9 +72,10 @@ describe("AuthService", () => {
     expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
   });
 
-  it("should throw error if credentials are invalid", async () => {
+  it("should throw AuthenticationError if credentials are invalid", async () => {
     vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
-    
-    await expect(authService.login("wrong@example.com", "wrong")).rejects.toThrow();
+
+    await expect(authService.login("wrong@example.com", "wrong")).rejects.toThrow(AuthenticationError);
   });
 });
+

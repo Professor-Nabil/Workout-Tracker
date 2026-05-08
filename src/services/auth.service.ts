@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../lib/db.js';
 import { env } from '../lib/env.js';
+import { AuthenticationError } from '../lib/errors.js';
 
 export class AuthService {
   async register(email: string, password: string) {
@@ -16,10 +17,10 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) throw new Error('Invalid credentials');
+    if (!user) throw new AuthenticationError();
 
     const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) throw new Error('Invalid credentials');
+    if (!isValid) throw new AuthenticationError();
 
     return user;
   }
@@ -53,7 +54,7 @@ export class AuthService {
     });
 
     if (!tokenRecord || tokenRecord.isRevoked || tokenRecord.expiresAt < new Date()) {
-      throw new Error('Invalid or expired refresh token');
+      throw new AuthenticationError('Invalid or expired refresh token');
     }
 
     const accessToken = jwt.sign({ userId: tokenRecord.userId }, env.JWT_ACCESS_SECRET, { expiresIn: '15m' });
