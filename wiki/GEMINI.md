@@ -37,6 +37,8 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Prisma Type Safety**: ALWAYS use `?? null` or explicit nullability handling when assigning optional input properties to Prisma model inputs to satisfy `exactOptionalPropertyTypes` constraints.
 - **Testing**: When mocking Prisma services in `vitest`, ALWAYS ensure that all used methods (e.g., `findFirst`, `update`) are explicitly defined in the `vi.mock` factory object to avoid `undefined` reference errors. NEVER use `as any` for type casting in tests unless absolutely necessary for complex Prisma-generated types; if required, use `// eslint-disable-next-line @typescript-eslint/no-explicit-any` with an explicit explanation, but strive to define complete mock objects matching the expected type.
 - **Service Patterns**: For any CRUD entity, ALWAYS implement `list` and `getById` methods as standard read operations.
+- **Middleware**: ALWAYS use a centralized error handling middleware to catch `AppError` instances and return standardized JSON responses.
+- **Express Types**: ALWAYS extend the Express `Request` type to include `user` or other custom properties attached by authentication middleware.
 - **Validation**: ALWAYS verify code with `npm run lint && npm run check && npm test` immediately following any modification.
 
 ## Implementation Guidelines
