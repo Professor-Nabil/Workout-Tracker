@@ -7,9 +7,10 @@ import { env } from "../../src/lib/env.js";
 
 describe("Workout Routes Integration Tests", () => {
   let token: string;
-  const userId = "test-user-id";
+  let userId: string;
 
   beforeEach(async () => {
+    userId = "test-user-id-" + Math.random().toString(36).substring(7);
     await prisma.workoutExercise.deleteMany({});
     await prisma.workout.deleteMany({});
     await prisma.exercise.deleteMany({});
@@ -283,14 +284,15 @@ describe("Workout Routes Integration Tests", () => {
           ],
         });
 
-      if (response.status !== 200) {
-        console.log(JSON.stringify(response.body, null, 2));
-      }
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Exercises reordered successfully");
 
-      const updatedWe1 = await prisma.workoutExercise.findUnique({ where: { id: we1.id } });
-      const updatedWe2 = await prisma.workoutExercise.findUnique({ where: { id: we2.id } });
+      const updatedWe1 = await prisma.workoutExercise.findUnique({
+        where: { id: we1.id },
+      });
+      const updatedWe2 = await prisma.workoutExercise.findUnique({
+        where: { id: we2.id },
+      });
 
       expect(updatedWe1?.sequence).toBe(2);
       expect(updatedWe2?.sequence).toBe(1);
