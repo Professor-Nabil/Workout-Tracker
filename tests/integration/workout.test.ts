@@ -1,25 +1,43 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterAll, beforeAll } from "vitest";
 import request from "supertest";
 import app from "../../src/app.js";
-import { prisma } from "../../src/lib/db.js";
+import * as db from "../../src/lib/db.js";
+import { createTestDatabase, dropTestDatabase } from "../lib/test-db.js";
 import jwt from "jsonwebtoken";
 import { env } from "../../src/lib/env.js";
+
+vi.mock("../../src/lib/db.js", () => ({
+  prisma: {}
+}));
 
 describe("Workout Routes Integration Tests", () => {
   let token: string;
   let userId: string;
+  let dbName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let testPrisma: any;
+
+  beforeAll(async () => {
+    dbName = "workout_test_" + Math.random().toString(36).substring(7);
+    testPrisma = await createTestDatabase(dbName);
+    vi.spyOn(db, "prisma", "get").mockReturnValue(testPrisma);
+  });
+
+  afterAll(async () => {
+    await dropTestDatabase(dbName);
+  });
 
   beforeEach(async () => {
     userId = "test-user-id-" + Math.random().toString(36).substring(7);
-    await prisma.workoutExercise.deleteMany({});
-    await prisma.workout.deleteMany({});
-    await prisma.exercise.deleteMany({});
-    await prisma.exerciseCategory.deleteMany({});
-    await prisma.user.deleteMany({});
-    await prisma.user.create({
+    await testPrisma.workoutExercise.deleteMany({});
+    await testPrisma.workout.deleteMany({});
+    await testPrisma.exercise.deleteMany({});
+    await testPrisma.exerciseCategory.deleteMany({});
+    await testPrisma.user.deleteMany({});
+    await testPrisma.user.create({
       data: {
         id: userId,
-        email: "test@example.com",
+        email: `test-${userId}@example.com`,
         password: "password",
       },
     });
@@ -44,7 +62,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("GET /api/workouts", () => {
     it("should list all user workouts", async () => {
-      await prisma.workout.create({
+      await testPrisma.workout.create({
         data: {
           title: "Push Day",
           scheduledAt: new Date(),
@@ -65,7 +83,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("GET /api/workouts/:id", () => {
     it("should return a workout by id", async () => {
-      const workout = await prisma.workout.create({
+      const workout = await testPrisma.workout.create({
         data: {
           title: "Leg Day",
           scheduledAt: new Date(),
@@ -85,7 +103,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("PATCH /api/workouts/:id", () => {
     it("should update a workout successfully", async () => {
-      const workout = await prisma.workout.create({
+      const workout = await testPrisma.workout.create({
         data: {
           title: "Leg Day",
           scheduledAt: new Date(),
@@ -105,7 +123,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("DELETE /api/workouts/:id", () => {
     it("should soft delete a workout successfully", async () => {
-      const workout = await prisma.workout.create({
+      const workout = await testPrisma.workout.create({
         data: {
           title: "Leg Day",
           scheduledAt: new Date(),
@@ -120,7 +138,7 @@ describe("Workout Routes Integration Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Workout deleted successfully");
 
-      const deletedWorkout = await prisma.workout.findUnique({
+      const deletedWorkout = await testPrisma.workout.findUnique({
         where: { id: workout.id },
       });
       expect(deletedWorkout?.deletedAt).not.toBeNull();
@@ -129,7 +147,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("POST /api/workouts/:workoutId/exercises", () => {
     it("should add an exercise to a workout successfully", async () => {
-      const workout = await prisma.workout.create({
+      const workout = await testPrisma.workout.create({
         data: {
           title: "Leg Day",
           scheduledAt: new Date(),
@@ -137,11 +155,11 @@ describe("Workout Routes Integration Tests", () => {
         },
       });
 
-      const category = await prisma.exerciseCategory.create({
+      const category = await testPrisma.exerciseCategory.create({
         data: { name: "Strength" },
       });
 
-      const exercise = await prisma.exercise.create({
+      const exercise = await testPrisma.exercise.create({
         data: {
           name: "Squat",
           categoryId: category.id,
@@ -166,7 +184,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("DELETE /api/workouts/:workoutId/exercises/:workoutExerciseId", () => {
     it("should remove an exercise from a workout successfully", async () => {
-      const workout = await prisma.workout.create({
+      const workout = await testPrisma.workout.create({
         data: {
           title: "Leg Day",
           scheduledAt: new Date(),
@@ -174,18 +192,18 @@ describe("Workout Routes Integration Tests", () => {
         },
       });
 
-      const category = await prisma.exerciseCategory.create({
+      const category = await testPrisma.exerciseCategory.create({
         data: { name: "Strength" },
       });
 
-      const exercise = await prisma.exercise.create({
+      const exercise = await testPrisma.exercise.create({
         data: {
           name: "Squat",
           categoryId: category.id,
         },
       });
 
-      const workoutExercise = await prisma.workoutExercise.create({
+      const workoutExercise = await testPrisma.workoutExercise.create({
         data: {
           workoutId: workout.id,
           exerciseId: exercise.id,
@@ -200,7 +218,7 @@ describe("Workout Routes Integration Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Exercise removed successfully");
 
-      const deletedWorkoutExercise = await prisma.workoutExercise.findUnique({
+      const deletedWorkoutExercise = await testPrisma.workoutExercise.findUnique({
         where: { id: workoutExercise.id },
       });
       expect(deletedWorkoutExercise).toBeNull();
@@ -209,7 +227,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("PATCH /api/workouts/:workoutId/exercises/:workoutExerciseId", () => {
     it("should update exercise completion status successfully", async () => {
-      const workout = await prisma.workout.create({
+      const workout = await testPrisma.workout.create({
         data: {
           title: "Leg Day",
           scheduledAt: new Date(),
@@ -217,18 +235,18 @@ describe("Workout Routes Integration Tests", () => {
         },
       });
 
-      const category = await prisma.exerciseCategory.create({
+      const category = await testPrisma.exerciseCategory.create({
         data: { name: "Strength" },
       });
 
-      const exercise = await prisma.exercise.create({
+      const exercise = await testPrisma.exercise.create({
         data: {
           name: "Squat",
           categoryId: category.id,
         },
       });
 
-      const workoutExercise = await prisma.workoutExercise.create({
+      const workoutExercise = await testPrisma.workoutExercise.create({
         data: {
           workoutId: workout.id,
           exerciseId: exercise.id,
@@ -248,7 +266,7 @@ describe("Workout Routes Integration Tests", () => {
 
   describe("PATCH /api/workouts/:workoutId/exercises/reorder", () => {
     it("should reorder exercises successfully", async () => {
-      const workout = await prisma.workout.create({
+      const workout = await testPrisma.workout.create({
         data: {
           title: "Leg Day",
           scheduledAt: new Date(),
@@ -256,21 +274,21 @@ describe("Workout Routes Integration Tests", () => {
         },
       });
 
-      const category = await prisma.exerciseCategory.create({
+      const category = await testPrisma.exerciseCategory.create({
         data: { name: "Strength" },
       });
 
-      const e1 = await prisma.exercise.create({
+      const e1 = await testPrisma.exercise.create({
         data: { name: "Squat", categoryId: category.id },
       });
-      const e2 = await prisma.exercise.create({
+      const e2 = await testPrisma.exercise.create({
         data: { name: "Bench", categoryId: category.id },
       });
 
-      const we1 = await prisma.workoutExercise.create({
+      const we1 = await testPrisma.workoutExercise.create({
         data: { workoutId: workout.id, exerciseId: e1.id, sequence: 1 },
       });
-      const we2 = await prisma.workoutExercise.create({
+      const we2 = await testPrisma.workoutExercise.create({
         data: { workoutId: workout.id, exerciseId: e2.id, sequence: 2 },
       });
 
@@ -287,12 +305,8 @@ describe("Workout Routes Integration Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Exercises reordered successfully");
 
-      const updatedWe1 = await prisma.workoutExercise.findUnique({
-        where: { id: we1.id },
-      });
-      const updatedWe2 = await prisma.workoutExercise.findUnique({
-        where: { id: we2.id },
-      });
+      const updatedWe1 = await testPrisma.workoutExercise.findUnique({ where: { id: we1.id } });
+      const updatedWe2 = await testPrisma.workoutExercise.findUnique({ where: { id: we2.id } });
 
       expect(updatedWe1?.sequence).toBe(2);
       expect(updatedWe2?.sequence).toBe(1);

@@ -1,24 +1,42 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterAll, beforeAll } from "vitest";
 import request from "supertest";
 import app from "../../src/app.js";
-import { prisma } from "../../src/lib/db.js";
+import * as db from "../../src/lib/db.js";
+import { createTestDatabase, dropTestDatabase } from "../lib/test-db.js";
 import jwt from "jsonwebtoken";
 import { env } from "../../src/lib/env.js";
 
+vi.mock("../../src/lib/db.js", () => ({
+  prisma: {}
+}));
+
 describe("Exercise Routes Integration Tests", () => {
   let token: string;
-  const userId = "test-user-id-" + Math.random().toString(36).substring(7);
+  let userId: string;
+  let dbName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let testPrisma: any;
+
+  beforeAll(async () => {
+    dbName = "exercise_test_" + Math.random().toString(36).substring(7);
+    testPrisma = await createTestDatabase(dbName);
+    vi.spyOn(db, "prisma", "get").mockReturnValue(testPrisma);
+  });
+
+  afterAll(async () => {
+    await dropTestDatabase(dbName);
+  });
 
   beforeEach(async () => {
-    await prisma.workoutExercise.deleteMany({});
-    await prisma.workout.deleteMany({});
-    await prisma.exercise.deleteMany({});
-    await prisma.exerciseCategory.deleteMany({});
-    await prisma.user.deleteMany({});
-    await prisma.user.create({
+    userId = "test-user-id-" + Math.random().toString(36).substring(7);
+    await testPrisma.workoutExercise.deleteMany({});
+    await testPrisma.exercise.deleteMany({});
+    await testPrisma.exerciseCategory.deleteMany({});
+    await testPrisma.user.deleteMany({});
+    await testPrisma.user.create({
       data: {
         id: userId,
-        email: "test@example.com",
+        email: `test-${userId}@example.com`,
         password: "password",
       },
     });
@@ -27,7 +45,7 @@ describe("Exercise Routes Integration Tests", () => {
 
   describe("GET /api/exercises/categories", () => {
     it("should list all exercise categories", async () => {
-      await prisma.exerciseCategory.create({
+      await testPrisma.exerciseCategory.create({
         data: { name: "Strength" },
       });
 
