@@ -51,3 +51,7 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Database Access**: Controllers call Services; Services interface with Prisma.
 - **API Contract**: Strictly follow `API-Schema.md` definitions.
 - **Testing**: `npm run check` (type check) must pass before any test execution.
+- **Git Workflow**: Use descriptive, conventional commit messages (e.g., `feat: ...`, `fix: ...`, `test: ...`). ALWAYS verify project status (`git status`, `git diff`) before committing.
+- **Linting Unused Variables**: When dealing with unused Express parameters (e.g., `next`), always use `// eslint-disable-next-line @typescript-eslint/no-unused-vars` immediately preceding the parameter block.
+- **Route Registration**: When registering routes with overlapping patterns (e.g., specific sub-routes vs generic parameterized routes), always register more specific paths first to avoid matching conflicts.
+- **Thin Controllers**: Controllers must NOT contain try-catch blocks; business errors should be propagated to the centralized error middleware.
