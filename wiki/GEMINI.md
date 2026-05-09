@@ -42,6 +42,7 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Express Request Augmentation**: ALWAYS use `declare module "express-serve-static-core"` for augmenting the Express `Request` type for custom middleware properties like `user`.
 - **Thin Controllers**: Controllers MUST act as thin orchestrators. They should only extract validated request data, call the appropriate service method, and send the response. They must NOT contain business logic.
 - **Service Patterns**: For any CRUD entity, ALWAYS implement `list` and `getById` methods as standard read operations.
+- **Thin Controllers**: Controllers MUST act as thin orchestrators. They should only extract validated request data (from `req.body`, `req.params`, `req.query`), call the appropriate service method, and send the final response. They must NOT contain business logic.
 - **Middleware**: ALWAYS use a centralized error handling middleware to catch `AppError` instances and return standardized JSON responses.
 - **Express Types**: ALWAYS extend the Express `Request` type to include `user` or other custom properties attached by authentication middleware.
 - **Validation**: ALWAYS verify code with `npm run lint && npm run check && npm test` immediately following any modification.
