@@ -29,6 +29,9 @@ This plan outlines the implementation of the controller and route layers, ensuri
   - `GET /api/workouts/:id`: Auth protected, call `WorkoutService.getById`.
   - `PATCH /api/workouts/:id`: Auth protected, validate input, call `WorkoutService.update`.
   - `DELETE /api/workouts/:id`: Auth protected, call `WorkoutService.softDelete`.
+  - `POST /api/workouts/:workoutId/exercises`: Auth protected, validate input, call `WorkoutService.addExercise`.
+  - `DELETE /api/workouts/:workoutId/exercises/:workoutExerciseId`: Auth protected, call `WorkoutService.removeExercise`.
+  - `PATCH /api/workouts/:workoutId/exercises/:workoutExerciseId`: Auth protected, call `WorkoutService.updateExerciseStatus`.
 
 ### Step 3: Exercise & Progress Routes (`src/routes/exercise.route.ts`, `src/routes/measurement.route.ts`)
 
@@ -37,8 +40,12 @@ This plan outlines the implementation of the controller and route layers, ensuri
   - `GET /api/exercises/categories`: Auth protected, call `CategoryService.list`.
   - `GET /api/exercises`: Auth protected, call `ExerciseService.list`.
   - `POST /api/exercises`: Auth protected, call `ExerciseService.create`.
+  - `PATCH /api/exercises/:id`: Auth protected, validate input, call `ExerciseService.update`.
+  - `DELETE /api/exercises/:id`: Auth protected, call `ExerciseService.delete`.
   - `POST /api/measurements`: Auth protected, call `MeasurementService.create`.
   - `GET /api/measurements`: Auth protected, call `MeasurementService.list`.
+  - `PATCH /api/measurements/:id`: Auth protected, validate input, call `MeasurementService.update`.
+  - `DELETE /api/measurements/:id`: Auth protected, call `MeasurementService.delete`.
 
 ### Step 4: Reports (`src/routes/report.route.ts`)
 
