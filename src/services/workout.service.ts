@@ -24,6 +24,11 @@ export interface AddExerciseInput {
   duration?: number;
 }
 
+export interface ReorderExerciseInput {
+  workoutExerciseId: string;
+  newSequence: number;
+}
+
 export class WorkoutService {
   async create(data: CreateWorkoutInput) {
     return await prisma.workout.create({
@@ -120,6 +125,25 @@ export class WorkoutService {
 
     return await prisma.workoutExercise.delete({
       where: { id: workoutExerciseId },
+    });
+  }
+
+  async reorderExercises(workoutId: string, userId: string, reorderInputs: ReorderExerciseInput[]) {
+    return await prisma.$transaction(async (tx) => {
+      const workout = await tx.workout.findFirst({
+        where: { id: workoutId, userId, deletedAt: null },
+      });
+
+      if (!workout) {
+        throw new ResourceNotFoundError("Workout not found");
+      }
+
+      for (const input of reorderInputs) {
+        await tx.workoutExercise.update({
+          where: { id: input.workoutExerciseId, workoutId },
+          data: { sequence: input.newSequence },
+        });
+      }
     });
   }
 
