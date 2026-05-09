@@ -36,6 +36,7 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Data Access Patterns**: When implementing services involving user-owned data, ALWAYS include owner ID checks (or `OR: [{ isSystem: true }, { ownerId: userId }]` for shared resources) to prevent unauthorized access.
 - **Prisma Type Safety**: ALWAYS use `?? null` or explicit nullability handling when assigning optional input properties to Prisma model inputs to satisfy `exactOptionalPropertyTypes` constraints.
 - **Testing**: When mocking Prisma services in `vitest`, ALWAYS ensure that all used methods (e.g., `findFirst`, `update`) are explicitly defined in the `vi.mock` factory object to avoid `undefined` reference errors.
+- **Service Patterns**: For any CRUD entity, ALWAYS implement `list` and `getById` methods as standard read operations.
 - **Validation**: ALWAYS verify code with `npm run lint && npm run check && npm test` immediately following any modification.
 
 ## Implementation Guidelines
