@@ -12,7 +12,8 @@ describe("errorHandler middleware", () => {
       json: vi.fn(),
     } as unknown as Response;
 
-    errorHandler(err, req, res);
+    const next = vi.fn();
+    errorHandler(err, req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
@@ -29,7 +30,8 @@ describe("errorHandler middleware", () => {
       json: vi.fn(),
     } as unknown as Response;
 
-    errorHandler(err, req, res);
+    const next = vi.fn();
+    errorHandler(err, req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith(

@@ -1,17 +1,18 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../lib/errors.js";
 import logger from "../lib/logger.js";
 import { env } from "../lib/env.js";
 
 export const errorHandler = (
   err: Error,
-  req: Request,
+  _req: Request,
   res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction
 ) => {
   if (err instanceof AppError) {
     logger.warn(`Operational error: ${err.message}`, {
       statusCode: err.statusCode,
-      path: req.path,
     });
     return res.status(err.statusCode).json({
       status: "error",
@@ -21,7 +22,6 @@ export const errorHandler = (
 
   logger.error(`Unexpected error: ${err.message}`, {
     stack: err.stack,
-    path: req.path,
   });
 
   res.status(500).json({
