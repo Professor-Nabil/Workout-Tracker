@@ -32,6 +32,7 @@ This plan outlines the implementation of the controller and route layers, ensuri
   - `POST /api/workouts/:workoutId/exercises`: Auth protected, validate input, call `WorkoutService.addExercise`.
   - `DELETE /api/workouts/:workoutId/exercises/:workoutExerciseId`: Auth protected, call `WorkoutService.removeExercise`.
   - `PATCH /api/workouts/:workoutId/exercises/:workoutExerciseId`: Auth protected, call `WorkoutService.updateExerciseStatus`.
+  - `PATCH /api/workouts/:workoutId/exercises/reorder`: Auth protected, validate input, call `WorkoutService.reorderExercises`.
 
 ### Step 3: Exercise & Progress Routes (`src/routes/exercise.route.ts`, `src/routes/measurement.route.ts`)
 
