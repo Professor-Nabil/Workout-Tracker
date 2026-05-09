@@ -9,6 +9,7 @@ vi.mock("../../src/lib/db.js", () => ({
       findMany: vi.fn(),
       findFirst: vi.fn(),
       create: vi.fn(),
+      update: vi.fn(),
       delete: vi.fn(),
     },
   },
@@ -36,14 +37,26 @@ describe("ExerciseService", () => {
     await expect(service.getById("ex-1", userId)).rejects.toThrow(ResourceNotFoundError);
   });
 
-  it("should create a custom exercise", async () => {
-    const data = { name: "Test Ex", categoryId: "cat-1" };
-    vi.mocked(prisma.exercise.create).mockResolvedValue({ id: "ex-1", ...data, description: null, isSystem: false, ownerId: userId, muscleGroup: null });
+  it("should update a custom exercise", async () => {
+    const data = { name: "Updated Ex" };
+    const mockExercise = { 
+        id: "ex-1", 
+        name: "Old Ex", 
+        categoryId: "cat-1", 
+        ownerId: userId, 
+        isSystem: false, 
+        description: null, 
+        muscleGroup: null 
+    };
     
-    const result = await service.create(userId, data);
-    expect(result.ownerId).toBe(userId);
-    expect(prisma.exercise.create).toHaveBeenCalledWith({
-      data: { ...data, isSystem: false, ownerId: userId },
+    vi.mocked(prisma.exercise.findFirst).mockResolvedValue(mockExercise);
+    vi.mocked(prisma.exercise.update).mockResolvedValue({ ...mockExercise, ...data });
+
+    const result = await service.update("ex-1", userId, data);
+    expect(result.name).toBe("Updated Ex");
+    expect(prisma.exercise.update).toHaveBeenCalledWith({
+      where: { id: "ex-1" },
+      data,
     });
   });
 });

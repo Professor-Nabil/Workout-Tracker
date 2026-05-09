@@ -8,6 +8,13 @@ export interface CreateExerciseInput {
   muscleGroup?: string;
 }
 
+export interface UpdateExerciseInput {
+  name?: string;
+  description?: string;
+  categoryId?: string;
+  muscleGroup?: string;
+}
+
 export class ExerciseService {
   async list(userId: string) {
     return await prisma.exercise.findMany({
@@ -41,6 +48,21 @@ export class ExerciseService {
         isSystem: false,
         ownerId: userId,
       },
+    });
+  }
+
+  async update(id: string, userId: string, data: UpdateExerciseInput) {
+    const exercise = await prisma.exercise.findFirst({
+      where: { id, ownerId: userId, isSystem: false },
+    });
+
+    if (!exercise) {
+      throw new ResourceNotFoundError("Exercise not found or cannot be updated");
+    }
+
+    return await prisma.exercise.update({
+      where: { id },
+      data,
     });
   }
 
