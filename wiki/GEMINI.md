@@ -31,6 +31,10 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Quality Control**: **EVERY TIME after you write or modify any code, you MUST run `npm run lint && npm run check && npm test` to ensure stability and quality.**
 - **Imports**: ALWAYS add `.js` at the end of relative file imports (e.g., `import { ... } from "../lib/db.js";`).
 - **Type Imports**: ALWAYS import types from the generated client using `import type { ... } from "../../src/generated/client/client.js";`.
+- **Transactional Integrity**: ALWAYS use `prisma.$transaction` for multi-step database writes to ensure atomic consistency.
+- **Service Design**: ALWAYS design services to be stateless; prioritize dependency injection/isolation and avoid circular dependencies.
+- **Prisma Type Safety**: ALWAYS use `?? null` or explicit nullability handling when assigning optional input properties to Prisma model inputs to satisfy `exactOptionalPropertyTypes` constraints.
+- **Validation**: ALWAYS verify code with `npm run lint && npm run check && npm test` immediately following any modification.
 
 ## Implementation Guidelines
 
