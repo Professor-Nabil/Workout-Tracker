@@ -33,6 +33,7 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Type Imports**: ALWAYS import types from the generated client using `import type { ... } from "../../src/generated/client/client.js";`.
 - **Transactional Integrity**: ALWAYS use `prisma.$transaction` for multi-step database writes to ensure atomic consistency.
 - **Service Design**: ALWAYS design services to be stateless; prioritize dependency injection/isolation and avoid circular dependencies.
+- **Data Access Patterns**: When implementing services involving user-owned data, ALWAYS include owner ID checks (or `OR: [{ isSystem: true }, { ownerId: userId }]` for shared resources) to prevent unauthorized access.
 - **Prisma Type Safety**: ALWAYS use `?? null` or explicit nullability handling when assigning optional input properties to Prisma model inputs to satisfy `exactOptionalPropertyTypes` constraints.
 - **Validation**: ALWAYS verify code with `npm run lint && npm run check && npm test` immediately following any modification.
 
