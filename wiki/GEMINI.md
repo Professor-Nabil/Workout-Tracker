@@ -39,6 +39,7 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Middleware Testing**: ALWAYS unit test critical middleware (Error Handler, Auth, Validation) by mocking `Request`, `Response`, and `NextFunction` objects.
 - **Middleware Validation**: ALWAYS use `zod` schemas to validate `req.body`, `req.query`, and `req.params`. For necessary type casting (like `as any`) when overriding Express types, use `// eslint-disable-next-line @typescript-eslint/no-explicit-any` with a clear explanation.
 - **Express Request Augmentation**: ALWAYS use `declare module "express-serve-static-core"` for augmenting the Express `Request` type for custom middleware properties like `user`.
+- **Thin Controllers**: Controllers MUST act as thin orchestrators. They should only extract validated request data, call the appropriate service method, and send the response. They must NOT contain business logic.
 - **Service Patterns**: For any CRUD entity, ALWAYS implement `list` and `getById` methods as standard read operations.
 - **Middleware**: ALWAYS use a centralized error handling middleware to catch `AppError` instances and return standardized JSON responses.
 - **Express Types**: ALWAYS extend the Express `Request` type to include `user` or other custom properties attached by authentication middleware.
