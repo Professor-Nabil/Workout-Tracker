@@ -55,4 +55,7 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Linting Unused Variables**: When dealing with unused Express parameters (e.g., `next`), always use `// eslint-disable-next-line @typescript-eslint/no-unused-vars` immediately preceding the parameter block.
 - **Test Isolation**: ALWAYS use a dynamic database-per-test-file approach for integration tests to prevent race conditions and ensure parallel execution stability.
 - **Route Ordering**: ALWAYS register more specific paths before parameterized paths (e.g., `/:workoutId/exercises/reorder` before `/:workoutId/exercises/:workoutExerciseId`) to avoid route matching conflicts.
+- **Library Compatibility**: BEFORE integrating external libraries (especially those modifying prototypes or runtime behavior), strictly verify their peer dependency requirements against project versions (e.g., Zod v4 vs v3) to avoid runtime failures.
+- **Documentation**: Prioritize manual, stable documentation over auto-generation scripts that rely on experimental or version-mismatched libraries.
+- **Data Integrity**: ALWAYS explicitly check DB column capacity (e.g., `@db.Text` for JWTs) during initial model definition to prevent runtime overflow errors.
 - **Thin Controllers**: Controllers must NOT contain try-catch blocks; business errors should be propagated to the centralized error middleware.
