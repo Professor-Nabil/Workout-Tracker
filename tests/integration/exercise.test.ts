@@ -59,4 +59,101 @@ describe("Exercise Routes Integration Tests", () => {
       expect(response.body[0].name).toBe("Strength");
     });
   });
+
+  describe("GET /api/exercises", () => {
+    it("should list all available exercises for the user", async () => {
+      const category = await testPrisma.exerciseCategory.create({
+        data: { name: "Strength" },
+      });
+      await testPrisma.exercise.create({
+        data: {
+          name: "Squat",
+          categoryId: category.id,
+          ownerId: userId,
+          isSystem: false,
+        },
+      });
+
+      const response = await request(app)
+        .get("/api/exercises")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBe(1);
+      expect(response.body[0].name).toBe("Squat");
+    });
+  });
+
+  describe("POST /api/exercises", () => {
+    it("should create a new exercise successfully", async () => {
+      const category = await testPrisma.exerciseCategory.create({
+        data: { name: "Strength" },
+      });
+
+      const response = await request(app)
+        .post("/api/exercises")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          name: "Deadlift",
+          categoryId: category.id,
+        });
+
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty("id");
+      expect(response.body.name).toBe("Deadlift");
+    });
+  });
+
+  describe("PATCH /api/exercises/:id", () => {
+    it("should update an exercise successfully", async () => {
+      const category = await testPrisma.exerciseCategory.create({
+        data: { name: "Strength" },
+      });
+      const exercise = await testPrisma.exercise.create({
+        data: {
+          name: "Squat",
+          categoryId: category.id,
+          ownerId: userId,
+          isSystem: false,
+        },
+      });
+
+      const response = await request(app)
+        .patch(`/api/exercises/${exercise.id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ name: "Squat V2" });
+
+      expect(response.status).toBe(200);
+      expect(response.body.name).toBe("Squat V2");
+    });
+  });
+
+  describe("DELETE /api/exercises/:id", () => {
+    it("should delete an exercise successfully", async () => {
+      const category = await testPrisma.exerciseCategory.create({
+        data: { name: "Strength" },
+      });
+      const exercise = await testPrisma.exercise.create({
+        data: {
+          name: "Squat",
+          categoryId: category.id,
+          ownerId: userId,
+          isSystem: false,
+        },
+      });
+
+      const response = await request(app)
+        .delete(`/api/exercises/${exercise.id}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Exercise deleted successfully");
+
+      const deletedExercise = await testPrisma.exercise.findUnique({
+        where: { id: exercise.id },
+      });
+      expect(deletedExercise).toBeNull();
+    });
+  });
 });
