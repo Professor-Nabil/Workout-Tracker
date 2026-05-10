@@ -33,72 +33,61 @@
 
         <h3>Your Workouts</h3>
         <div id="workout-list"></div>
+
+        <hr>
+        <h3>Log Measurement</h3>
+        <div class="form-group"><input type="number" id="measurement-weight" placeholder="Weight (kg)"></div>
+        <button onclick="handleLogMeasurement()">Log Weight</button>
+        <div id="measurement-list"></div>
+
+        <hr>
+        <h3>Exercises</h3>
+        <div id="exercise-list"></div>
     </div>
 
     <div id="message"></div>
 
     <script>
-        // Check session on page load
-        if (localStorage.getItem('token')) {
-            showDashboard();
-        }
+        // ... existing handleAuth, showDashboard, handleCreateWorkout, handleLogout functions ...
 
-        async function handleAuth(url) {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                if (data.accessToken) localStorage.setItem('token', data.accessToken);
-                showDashboard();
-            } else {
-                document.getElementById('message').innerText = 'Error: ' + JSON.stringify(data);
-            }
-        }
-
-        function showDashboard() {
+        async function showDashboard() {
             document.getElementById('auth-section').style.display = 'none';
             document.getElementById('dashboard-section').style.display = 'block';
-            loadWorkouts();
+            await loadWorkouts();
+            await loadMeasurements();
+            await loadExercises();
         }
 
-        async function loadWorkouts() {
-            const res = await fetch('/api/workouts', {
+        async function loadMeasurements() {
+            const res = await fetch('/api/measurements', {
                 headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
             });
-            const workouts = await res.json();
-            document.getElementById('workout-list').innerHTML = '<pre>' + JSON.stringify(workouts, null, 2) + '</pre>';
+            const data = await res.json();
+            document.getElementById('measurement-list').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
         }
 
-        async function handleCreateWorkout() {
-            const title = document.getElementById('workout-title').value;
-            const scheduledAt = document.getElementById('workout-date').value;
-            
-            const res = await fetch('/api/workouts', {
+        async function handleLogMeasurement() {
+            const weight = parseFloat(document.getElementById('measurement-weight').value);
+            const res = await fetch('/api/measurements', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token') 
                 },
-                body: JSON.stringify({ title, scheduledAt })
+                body: JSON.stringify({ weight })
             });
-
-            if (res.ok) {
-                document.getElementById('workout-title').value = '';
-                loadWorkouts();
-            } else {
-                alert('Failed to create workout');
-            }
+            if (res.ok) loadMeasurements();
         }
 
-        function handleLogout() {
-            localStorage.removeItem('token');
-            location.reload();
+        async function loadExercises() {
+            const res = await fetch('/api/exercises', {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+            });
+            const data = await res.json();
+            document.getElementById('exercise-list').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
         }
+
+        // ... existing handleAuth, handleCreateWorkout, handleLogout, loadWorkouts ...
     </script>
 </body>
 </html>
