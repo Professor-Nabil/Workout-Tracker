@@ -35,6 +35,13 @@
         <div id="workout-list"></div>
 
         <hr>
+        <div id="workout-detail" style="display: none;">
+            <button onclick="hideDetail()">Back to Dashboard</button>
+            <h2 id="detail-title"></h2>
+            <div id="detail-exercises"></div>
+        </div>
+
+        <hr>
         <h3>Log Measurement</h3>
         <div class="form-group"><input type="number" id="measurement-weight" placeholder="Weight (kg)"></div>
         <button onclick="handleLogMeasurement()">Log Weight</button>
@@ -48,46 +55,39 @@
     <div id="message"></div>
 
     <script>
-        // ... existing handleAuth, showDashboard, handleCreateWorkout, handleLogout functions ...
+        // ... (existing helper functions)
 
-        async function showDashboard() {
-            document.getElementById('auth-section').style.display = 'none';
+        async function loadWorkouts() {
+            const res = await fetch('/api/workouts', {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+            });
+            const workouts = await res.json();
+            const list = document.getElementById('workout-list');
+            list.innerHTML = workouts.map(w => \`
+                <div style="border: 1px solid #ccc; margin: 5px; padding: 5px;">
+                    \${w.title} 
+                    <button onclick="loadWorkoutDetail('\${w.id}')">View/Edit</button>
+                </div>
+            \`).join('');
+        }
+
+        async function loadWorkoutDetail(id) {
+            const res = await fetch('/api/workouts/' + id, {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+            });
+            const workout = await res.json();
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('workout-detail').style.display = 'block';
+            document.getElementById('detail-title').innerText = workout.title;
+            document.getElementById('detail-exercises').innerHTML = '<pre>' + JSON.stringify(workout.exercises, null, 2) + '</pre>';
+        }
+
+        function hideDetail() {
             document.getElementById('dashboard-section').style.display = 'block';
-            await loadWorkouts();
-            await loadMeasurements();
-            await loadExercises();
+            document.getElementById('workout-detail').style.display = 'none';
         }
 
-        async function loadMeasurements() {
-            const res = await fetch('/api/measurements', {
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            const data = await res.json();
-            document.getElementById('measurement-list').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-        }
-
-        async function handleLogMeasurement() {
-            const weight = parseFloat(document.getElementById('measurement-weight').value);
-            const res = await fetch('/api/measurements', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token') 
-                },
-                body: JSON.stringify({ weight })
-            });
-            if (res.ok) loadMeasurements();
-        }
-
-        async function loadExercises() {
-            const res = await fetch('/api/exercises', {
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            const data = await res.json();
-            document.getElementById('exercise-list').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-        }
-
-        // ... existing handleAuth, handleCreateWorkout, handleLogout, loadWorkouts ...
+        // ... (remaining functions)
     </script>
 </body>
 </html>
