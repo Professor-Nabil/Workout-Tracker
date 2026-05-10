@@ -24,6 +24,14 @@
     <div id="dashboard-section" style="display: none;">
         <h1>Dashboard</h1>
         <button onclick="handleLogout()">Logout</button>
+        
+        <hr>
+        <h3>Create New Workout</h3>
+        <div class="form-group"><input type="text" id="workout-title" placeholder="Workout Title"></div>
+        <div class="form-group"><input type="datetime-local" id="workout-date"></div>
+        <button onclick="handleCreateWorkout()">Create Workout</button>
+
+        <h3>Your Workouts</h3>
         <div id="workout-list"></div>
     </div>
 
@@ -64,6 +72,27 @@
             });
             const workouts = await res.json();
             document.getElementById('workout-list').innerHTML = '<pre>' + JSON.stringify(workouts, null, 2) + '</pre>';
+        }
+
+        async function handleCreateWorkout() {
+            const title = document.getElementById('workout-title').value;
+            const scheduledAt = document.getElementById('workout-date').value;
+            
+            const res = await fetch('/api/workouts', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token') 
+                },
+                body: JSON.stringify({ title, scheduledAt })
+            });
+
+            if (res.ok) {
+                document.getElementById('workout-title').value = '';
+                loadWorkouts();
+            } else {
+                alert('Failed to create workout');
+            }
         }
 
         function handleLogout() {
