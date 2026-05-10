@@ -53,5 +53,6 @@ This file serves as the context source for Gemini CLI agents to maintain project
 - **Testing**: `npm run check` (type check) must pass before any test execution.
 - **Git Workflow**: Use descriptive, conventional commit messages (e.g., `feat: ...`, `fix: ...`, `test: ...`). ALWAYS verify project status (`git status`, `git diff`) before committing.
 - **Linting Unused Variables**: When dealing with unused Express parameters (e.g., `next`), always use `// eslint-disable-next-line @typescript-eslint/no-unused-vars` immediately preceding the parameter block.
-- **Route Registration**: When registering routes with overlapping patterns (e.g., specific sub-routes vs generic parameterized routes), always register more specific paths first to avoid matching conflicts.
+- **Test Isolation**: ALWAYS use a dynamic database-per-test-file approach for integration tests to prevent race conditions and ensure parallel execution stability.
+- **Route Ordering**: ALWAYS register more specific paths before parameterized paths (e.g., `/:workoutId/exercises/reorder` before `/:workoutId/exercises/:workoutExerciseId`) to avoid route matching conflicts.
 - **Thin Controllers**: Controllers must NOT contain try-catch blocks; business errors should be propagated to the centralized error middleware.
