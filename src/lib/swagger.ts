@@ -1,11 +1,5 @@
-// import { OpenAPIGenerator } from "zod-to-openapi";
-// import "zod-to-openapi/dist/zod-extensions.js";
-// import { authSchema, tokenSchema } from "../schemas/auth.schema.js";
-// import { createExerciseSchema, updateExerciseSchema } from "../schemas/exercise.schema.js";
-// import { createMeasurementSchema, updateMeasurementSchema } from "../schemas/measurement.schema.js";
-// import { createWorkoutSchema, updateWorkoutSchema } from "../schemas/workout.schema.js";
-
-export function generateOpenApiDocument() {
+// Generator disabled due to runtime prototype conflicts.
+export async function generateOpenApiDocument() {
   return {
     openapi: "3.0.0",
     info: {

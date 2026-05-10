@@ -10,7 +10,8 @@
     "build": "tsc",
     "check": "tsc --noEmit && tsc --noEmit -p tests/tsconfig.json",
     "lint": "eslint src tests",
-    "tree": "clear; tree -I node_modules -I .git -I wiki -I dist -a"
+    "tree": "clear; tree -I node_modules -I .git -I wiki -I dist -a",
+    "generate:docs": "tsx scripts/generate-openapi.ts"
   },
   "repository": {
     "type": "git",
