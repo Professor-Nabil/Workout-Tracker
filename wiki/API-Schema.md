@@ -173,14 +173,18 @@ This document defines the expected JSON data structures for API request and resp
 
 ```json
 {
-  "summary": {
+  "workoutSummary": {
     "totalWorkouts": "number",
-    "totalVolume": "number"
+    "totalDuration": "number",
+    "categoryBreakdown": {
+      "categoryName": "number"
+    }
   },
-  "data": [
+  "weightProgress": [
     {
-      "date": "string",
-      "weight": "number"
+      "id": "uuid",
+      "weight": "number",
+      "date": "string"
     }
   ]
 }
