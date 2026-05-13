@@ -2,6 +2,14 @@
 
 ---
 
+## Security
+
+```bash
+# Generate random JWT Token on Linux
+openssl rand -base64 32
+# Output: NOMp77/aZ7b7XV1a513t1OMLxeDS3UKRdMXkxFRQBuY=
+```
+
 ## NPM
 
 ```bash
