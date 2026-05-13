@@ -22,6 +22,7 @@
 - Validation: `zod`
 - Testing: `vitest` `supertest` `@faker-js/faker`
 - Database ORM: Prisma 7 `prisma` `@prisma/client` `@prisma/adapter-mariadb`
+- `tree-node-cli`: For list file (cross-platform) "Mac, Linux, Windows"
 
 ---
 

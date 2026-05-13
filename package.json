@@ -8,9 +8,10 @@
   },
   "scripts": {
     "start": "node ./dist/server.js",
-    "build": "rm -rf ./dist/ && tsc",
+    "build": "node -e \"fs.rmSync('./dist', {recursive: true, force: true})\" && tsc",
     "dev": "tsx watch ./src/server.ts",
-    "check": "tsc --noEmit -p ./tests/tsconfig.json"
+    "check": "tsc --noEmit -p ./tests/tsconfig.json",
+    "tree": "npx tree-node-cli -I 'node_modules|.git|wiki|dist' -a"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "@types/supertest": "^7.2.0",
     "prisma": "^7.8.0",
     "supertest": "^7.2.2",
+    "tree-node-cli": "^3.0.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.6"
