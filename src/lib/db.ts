@@ -1,6 +1,4 @@
-/*
- * DB Connection
- */
+// ./src/lib/db.ts
 import { env } from "../schemas/env.schema.js";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "../generated/prisma/client.js";
