@@ -22,7 +22,6 @@
 - Validation: `zod`
 - Testing: `vitest` `supertest` `@faker-js/faker`
 - Database ORM: Prisma 7 `prisma` `@prisma/client` `@prisma/adapter-mariadb`
-- Environment Variables: `dotenv`
 
 ---
 
@@ -32,3 +31,4 @@
 - Express `@typse/express`
 - SuperTest `@typse/supertest`
 - Bcrypt `@typse/bcrypt`
+- JWT `@typse/jsonwebtoken`
