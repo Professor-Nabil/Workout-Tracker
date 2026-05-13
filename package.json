@@ -15,7 +15,9 @@
     "test": "vitest",
     "test:watch": "vitest watch",
     "test:coverage": "vitest --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "prisma:push": "prisma db push",
+    "prisma:generate": "prisma generate"
   },
   "repository": {
     "type": "git",
