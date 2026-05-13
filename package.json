@@ -7,7 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./dist/server.js",
+    "build": "rm -rf ./dist/ && tsc",
+    "dev": "tsx watch ./src/server.ts",
+    "check": "tsc --noEmit -p ./tests/tsconfig.json"
   },
   "repository": {
     "type": "git",
