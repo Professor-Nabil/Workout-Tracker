@@ -11,7 +11,11 @@
     "build": "node -e \"fs.rmSync('./dist', {recursive: true, force: true})\" && tsc",
     "dev": "tsx watch ./src/server.ts",
     "check": "tsc --noEmit -p ./tests/tsconfig.json",
-    "tree": "npx tree-node-cli -I 'node_modules|.git|wiki|dist' -a"
+    "tree": "npx tree-node-cli -I 'node_modules|.git|wiki|dist' -a",
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui"
   },
   "repository": {
     "type": "git",
