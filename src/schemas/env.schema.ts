@@ -5,13 +5,15 @@ import "dotenv/config";
 import z from "zod";
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().url(),
+  DATABASE_URL: z
+    .string()
+    .refine((url) => url.startsWith("mysql"), "Invalid URL format"),
 });
 
 const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
-  console.error(`Invalid Environment Variables: ${_env.error.format()}`);
+  console.error(`Invalid Environment Variables: ${_env.error}`);
   process.exit(1);
 }
 
