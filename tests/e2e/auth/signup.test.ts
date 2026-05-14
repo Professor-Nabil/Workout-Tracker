@@ -36,4 +36,22 @@ describe("Test API POST /auth", () => {
 
     expect(result.status).toBe(409);
   });
+  it("Should return 400 if email or password is missing", async () => {
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
+    const empty = await request(app).post("/auth/signup").send({});
+    const missingEmail = await request(app)
+      .post("/auth/signup")
+      .send({ email: user.email });
+    const missingPassword = await request(app)
+      .post("/auth/signup")
+      .send({ password: user.password });
+
+    expect(empty.status).toBe(400);
+    expect(missingEmail.status).toBe(400);
+    expect(missingPassword.status).toBe(400);
+  });
 });
