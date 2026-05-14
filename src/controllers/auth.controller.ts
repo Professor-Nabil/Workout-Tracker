@@ -1,8 +1,12 @@
 // ./src/controllers/auth.controller.ts
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { signupService } from "../services/auth.service.js";
 
-export const signupController = async (req: Request, res: Response) => {
+export const signupController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { email, password } = req.body;
 
@@ -22,10 +26,6 @@ export const signupController = async (req: Request, res: Response) => {
 
     res.status(201).json(body);
   } catch (err) {
-    if (err instanceof Error) {
-      console.error(err.message);
-    } else {
-      console.error(err);
-    }
+    next(err);
   }
 };
