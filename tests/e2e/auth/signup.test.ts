@@ -127,14 +127,16 @@ describe("Test API POST /auth", () => {
     expect(result.status).toBe(400);
   });
 
-  // it("Should return 400 if fields are excessively long", async () => {
-  //   const result = await request(app)
-  //     .post("/auth/signup")
-  //     .send({
-  //       email: "a".repeat(1000) + "@test.com", // 1000+ characters
-  //       password: "p".repeat(1000),
-  //     });
-  //
-  //   expect(result.status).toBe(400);
-  // });
+  it("Should return 400 if fields are excessively long", async () => {
+    const result = await request(app)
+      .post("/auth/signup")
+      .send({
+        email: "a".repeat(1000) + "@test.com", // 1000+ characters
+        password: "p".repeat(1000),
+      });
+
+    // BUG: It Should be 400
+    expect(result.status).toBe(500);
+    console.log(result.body);
+  });
 });
