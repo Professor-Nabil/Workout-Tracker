@@ -36,6 +36,7 @@ describe("Test API POST /auth", () => {
 
     expect(result.status).toBe(409);
   });
+
   it("Should return 400 if email or password is missing", async () => {
     const user = {
       email: faker.internet.email(),
@@ -76,4 +77,15 @@ describe("Test API POST /auth", () => {
     });
   });
 
+  it("Should return 400 if password short", async () => {
+    const user = {
+      email: faker.internet.email(),
+      password: "Short", // The password less than 8
+    };
+
+    const result = await request(app).post("/auth/signup").send(user);
+
+    expect(result.status).toBe(400);
+    expect(result.body.status).toBe("fail");
+  });
 });
