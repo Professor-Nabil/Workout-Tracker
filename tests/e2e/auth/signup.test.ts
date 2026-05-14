@@ -54,4 +54,26 @@ describe("Test API POST /auth", () => {
     expect(missingEmail.status).toBe(400);
     expect(missingPassword.status).toBe(400);
   });
+
+  it("Should return 400 if email is invalid", async () => {
+    const invalidEmails = [
+      "plainaddress", // No @ symbol
+      "#@%^%#$@#$@#.com", // Random characters
+      "@example.com", // No local part
+      "Joe Smith <email@example.com>", // Extra text
+      "email.example.com", // No @ symbol
+      "email@example@example.com", // Multiple @ symbols
+    ];
+    const password = faker.internet.password();
+
+    invalidEmails.forEach(async (email) => {
+      const result = await request(app)
+        .post("/auth/signup")
+        .send({ email, password });
+
+      expect(result.status).toBe(400);
+      expect(result.body.status).toBe("fail");
+    });
+  });
+
 });
