@@ -3,14 +3,16 @@ import z from "zod";
 import { AppError } from "../lib/app.error.js";
 
 const signupSchema = z.object({
-  body: z.object({
-    email: z
-      .string({ required_error: "Email is required" })
-      .email("Invalid email format"),
-    password: z
-      .string({ required_error: "Password is required" })
-      .min(8, "Password must be at least 8 characters long"),
-  }),
+  body: z
+    .object({
+      email: z
+        .string({ required_error: "Email is required" })
+        .email("Invalid email format"),
+      password: z
+        .string({ required_error: "Password is required" })
+        .min(8, "Password must be at least 8 characters long"),
+    })
+    .strict(),
 });
 
 export const validateSignup = async (
