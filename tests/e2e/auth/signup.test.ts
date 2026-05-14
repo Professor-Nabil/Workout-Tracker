@@ -24,4 +24,16 @@ describe("Test API POST /auth", () => {
     expect(result.body.data.token).toBeDefined();
     expect(result.body.data.token.length).toBeGreaterThan(150);
   });
+
+  it("Should return 409 if user already exists", async () => {
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
+    await request(app).post("/auth/signup").send(user);
+    const result = await request(app).post("/auth/signup").send(user);
+
+    expect(result.status).toBe(409);
+  });
 });
