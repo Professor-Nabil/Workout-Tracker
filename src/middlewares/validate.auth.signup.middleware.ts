@@ -27,8 +27,11 @@ export const validateSignup = async (
     next();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      const message = err.errors.map((ex) => ex.message).join(", ");
-      return next(new AppError(message, 400));
+      const formatedError = err.errors.map((err) => ({
+        faild: err.path[1],
+        message: err.message,
+      }));
+      return next(new AppError("Validation Failed", 400, formatedError));
     }
     next();
   }
