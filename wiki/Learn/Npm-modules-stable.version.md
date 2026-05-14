@@ -37,4 +37,7 @@ npm install zod@3
 
 ## Check for Deprecation
 npm view zod@3.23.8 deprecated
+
+## Check the "Maintenance" Activity
+npm view zod time
 ```
