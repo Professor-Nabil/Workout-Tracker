@@ -20,3 +20,9 @@ export class ConflectError extends AppError {
     super(message, 409);
   }
 }
+
+export class BadRequestError extends AppError {
+  constructor(message: string) {
+    super(message, 400);
+  }
+}

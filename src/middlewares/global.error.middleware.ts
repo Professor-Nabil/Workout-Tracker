@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { AppError } from "../lib/app.error.js";
+import { ConflectError } from "../lib/app.error.js";
 
 export const globalErrorHandler = (
   err: any,
@@ -11,7 +11,7 @@ export const globalErrorHandler = (
   err.status = err.status || "error";
 
   if (err.code === "P2002") {
-    err = new AppError("Email already exists", 409);
+    err = new ConflectError("Email already exists");
   }
 
   res.status(err.statusCode).json({

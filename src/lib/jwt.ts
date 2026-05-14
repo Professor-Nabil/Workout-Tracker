@@ -1,3 +1,4 @@
+// ./src/lib/jwt.ts
 import jwt from "jsonwebtoken";
 import { env } from "../schemas/env.schema.js";
 
