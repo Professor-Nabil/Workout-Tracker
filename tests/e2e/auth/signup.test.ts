@@ -88,4 +88,19 @@ describe("Test API POST /auth", () => {
     expect(result.status).toBe(400);
     expect(result.body.status).toBe("fail");
   });
+
+  it("Should return 400 if Content-Type in not application/json", async () => {
+    const user = JSON.stringify({
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    });
+
+    const result = await request(app)
+      .post("/auth/signup")
+      .set("Content-Type", "test/plain")
+      .send(user);
+
+    await request(app).post("/auth/signup").send().expect(400);
+    expect(result.status).toBe(400);
+  });
 });
