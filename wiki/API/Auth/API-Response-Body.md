@@ -96,11 +96,18 @@
   errors: [ { message: "Unrecognized key(s) in object: 'role', 'hacker'" } ]
 }
 
+// NOTE: Before fix
+
 // stdout | tests/e2e/auth/signup.test.ts > Test API POST /auth > Should return 400 if JSON body is malformed
 {
   status: 400,
   message: "Expected ':' after property name in JSON at position 37 (line 1 column 38)"
 }
+
+// NOTE: After fix
+
+// stdout | tests/e2e/auth/signup.test.ts > Test API POST /auth > Should return 400 if JSON body is malformed
+{ status: 'fail', message: 'Maiformed JSON: Please check your syntax' }
 
 // stdout | tests/e2e/auth/signup.test.ts > Test API POST /auth > Should return 400 if fields are excessively long
 {
