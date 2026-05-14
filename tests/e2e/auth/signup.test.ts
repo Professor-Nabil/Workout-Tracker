@@ -111,10 +111,19 @@ describe("Test API POST /auth", () => {
       role: "ADMIN", // HACK: Attaker trying to elevate privilegee
       hacker: true,
     };
+    // BUG: Don't truse outside word
 
     const result = await request(app).post("/auth/signup").send(user);
 
     expect(result.status).toBe(400);
   });
 
+  it("Should return 400 if JSON body is malformed", async () => {
+    const result = await request(app)
+      .post("/auth/signup")
+      .set("Content-Type", "application/json")
+      .send(`{"email":"user@email.com", "password","password" `); // NOTE: Missing closing brace
+
+    expect(result.status).toBe(400);
+  });
 });
