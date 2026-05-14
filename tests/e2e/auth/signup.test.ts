@@ -103,4 +103,18 @@ describe("Test API POST /auth", () => {
     await request(app).post("/auth/signup").send().expect(400);
     expect(result.status).toBe(400);
   });
+
+  it("Should ignore extra fieleds and not save them to the database", async () => {
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      role: "ADMIN", // HACK: Attaker trying to elevate privilegee
+      hacker: true,
+    };
+
+    const result = await request(app).post("/auth/signup").send(user);
+
+    expect(result.status).toBe(400);
+  });
+
 });
