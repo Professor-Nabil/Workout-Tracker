@@ -8,13 +8,20 @@ export const globalErrorHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || "error";
 
+  // Handl syntax errors (like JSON)
+  if (err instanceof SyntaxError && "body" in err) {
+    err = new AppError("Maiformed JSON: Please check your syntax", 400)
+  }
+
+  // 2. Handle Prisma Errors
   if (err.code === "P2002") {
     err = new AppError("Email already exists", 409);
-    // │   └╴  Expected 3 arguments, but got 2. ts (2554) [15, 11]
   }
+
+  // Fallback
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
 
   res.status(err.statusCode).json({
     status: err.status,
