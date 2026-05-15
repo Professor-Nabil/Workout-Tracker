@@ -6,7 +6,7 @@ const envSchema = z.object({
   DATABASE_URL: z
     .string()
     .refine((url) => url.startsWith("mysql"), "Invalid URL format"),
-  PORT: z.string().transform(Number).default(3456),
+  PORT: z.coerce.number(),
   JWT_SECRET: z.string().min(32),
 });
 
