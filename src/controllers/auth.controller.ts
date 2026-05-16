@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import type { SginupResponseSchema } from "../schemas/response/auth/signup.schema.js";
 import { signupService } from "../services/auth.service.js";
 
 export const signupController = async (
@@ -11,18 +12,15 @@ export const signupController = async (
 
     const { user, token } = await signupService(email, password);
 
-    const body = {
-      message: "Success",
-      data: {
-        user: {
-          id: user.id,
-          email: user.email,
-        },
-        token: token,
+    const resData: SginupResponseSchema = {
+      status: 201,
+      body: {
+        message: "Success",
+        data: { user, token },
       },
     };
 
-    res.status(201).json(body);
+    res.status(resData.status).json(resData.body);
   } catch (err) {
     next(err);
   }
