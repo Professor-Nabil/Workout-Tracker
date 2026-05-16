@@ -22,4 +22,19 @@ describe("API POST /auth/signup", () => {
     }
     expect(result.success).toBe(true);
   });
+
+  it("Should fail if email already exists", async () => {
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
+    await request(app).post("/auth/signup").send(user);
+    const { status, body } = await request(app).post("/auth/signup").send(user);
+
+    expect(status).toBe(409);
+    expect(body).toHaveProperty("status");
+    expect(body.status).toBe("fail");
+    expect(body).toHaveProperty("message");
+  });
 });
