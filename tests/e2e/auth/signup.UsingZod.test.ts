@@ -3,13 +3,13 @@ import app from "../../../src/app.js";
 import { faker } from "@faker-js/faker";
 import { sginupResponseSchema } from "../../../src/schemas/response/auth/signup.schema.js";
 
-const user = {
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-};
-
 describe("API POST /auth/signup", () => {
   it("Happy path", async () => {
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
     const { status, body } = await request(app).post("/auth/signup").send(user);
 
     const result = sginupResponseSchema.safeParse({ status, body });
@@ -36,5 +36,22 @@ describe("API POST /auth/signup", () => {
     expect(body).toHaveProperty("status");
     expect(body.status).toBe("fail");
     expect(body).toHaveProperty("message");
+  });
+
+  it("Should fail if bad request", async () => {
+    const email = faker.internet.email();
+    const password = faker.internet.password();
+
+    const emptyBody = await request(app).post("/auth/signup").send({});
+    const missingEmail = await request(app)
+      .post("/auth/signup")
+      .send({ password });
+    const missingPassword = await request(app)
+      .post("/auth/signup")
+      .send({ email });
+
+    expect(emptyBody.status).toBe(400);
+    expect(missingEmail.status).toBe(400);
+    expect(missingPassword.status).toBe(400);
   });
 });
