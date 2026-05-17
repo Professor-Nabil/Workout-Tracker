@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../app.js";
+import app from "../../../app.js";
 import { faker } from "@faker-js/faker";
 import z from "zod";
 
@@ -25,6 +25,8 @@ describe("API /auth/sginup", () => {
         expect(z.email().safeParse(email).success).toBe(true);
         expect(z.jwt().safeParse(token).success).toBe(true);
         expect(z.string().min(5).safeParse(message).success).toBe(true);
+        expect(user).not.toHaveProperty("hashPassword");
+        expect(user).not.toHaveProperty("password");
       });
   });
 
@@ -33,14 +35,15 @@ describe("API /auth/sginup", () => {
     await request(app).post("/auth/signup").send(user);
     await request(app).post("/auth/signup").send(user).expect(409);
   });
-  it("Should failed if email already exists", async () => {
+
+  it("Should failed if email or password is missing", async () => {
     const { email, password } = generateRandomUser();
     await request(app).post("/auth/signup").send().expect(400);
     await request(app).post("/auth/signup").send({ email }).expect(400);
     await request(app).post("/auth/signup").send({ password }).expect(400);
     await request(app)
       .post("/auth/signup")
-      .send({ email, password, a: "a" })
+      .send({ email, password, anydata: "anydata" })
       .expect(400);
   });
 });
