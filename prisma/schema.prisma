@@ -8,9 +8,20 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String         @id @default(uuid())
+  email        String         @unique
   hashPassword String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  refreshToken RefreshToken[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique @db.VarChar(500) // Stores the signed JWT or token identifier
+  // token     String   @db.VarChar(500) // Stores the signed JWT or token identifier
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Deletes tokens if user is deleted
+  expiresAt DateTime // Enforces the hard 7-day limit in the DB
+  createdAt DateTime @default(now())
 }

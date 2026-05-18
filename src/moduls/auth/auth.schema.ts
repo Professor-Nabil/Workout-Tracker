@@ -16,7 +16,8 @@ export const responseSignupSchema = z.object({
       id: z.uuid(),
       email: z.email(),
     }),
-    token: z.jwt(),
+    accessToken: z.jwt(),
+    refreshToken: z.jwt(),
   }),
 });
 
