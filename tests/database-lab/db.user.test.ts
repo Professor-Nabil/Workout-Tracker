@@ -1,8 +1,9 @@
 /*
- * 1. Create user
- * 2. Read user
- * 3. Update user
- * 4. Delete user
+ * ### Database health ### user
+ * *** Create user ***
+ * *** Read user *** Check if all data is valid
+ * *** Update user *** Check email and updatedAt
+ * *** Delete user *** Check if user deleted
  */
 import db from "../../src/lib/db.js"; // Prisma client API
 import bcrypt from "bcrypt"; // For hash password
@@ -23,7 +24,7 @@ const mockUser1 = {
   password: generateRandomPassword(),
 };
 
-describe("Database health", () => {
+describe("### Database health ### user", () => {
   it("*** Create user ***", async () => {
     try {
       const hashPassword = await bcrypt.hash(mockUser1.password, 10);
