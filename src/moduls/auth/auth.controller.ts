@@ -15,11 +15,7 @@ export const sginupController = async (
 
     const responseBody: ResponseSignupSchema = {
       message: "Success signup",
-      data: {
-        user: { id, email },
-        accessToken,
-        refreshToken,
-      },
+      data: { user: { id, email }, accessToken, refreshToken },
     };
 
     res.status(201).json(responseBody);

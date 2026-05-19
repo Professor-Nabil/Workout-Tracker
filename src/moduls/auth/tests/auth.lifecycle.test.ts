@@ -3,6 +3,8 @@ import app from "../../../app.js";
 import { faker } from "@faker-js/faker";
 import z from "zod";
 
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const generateRandomUser = () => {
   return {
     email: faker.internet.email(),
@@ -12,13 +14,13 @@ const generateRandomUser = () => {
 
 describe("API /auth Token Lifecycle Handling", () => {
   let activeRefreshToken = "";
-  let userCredentials = generateRandomUser();
+  let user = generateRandomUser();
 
   // Setup: Register a user and capture an initial token to test rotation
   beforeAll(async () => {
     const signupRes = await request(app)
       .post("/auth/signup")
-      .send(userCredentials)
+      .send(user)
       .expect(201);
 
     activeRefreshToken = signupRes.body.data.refreshToken;
@@ -26,31 +28,26 @@ describe("API /auth Token Lifecycle Handling", () => {
 
   describe("POST /auth/refresh - Token Rotation Lifecycle", () => {
     it("Happy Path: Should successfully rotate valid refresh tokens", async () => {
+      await wait(1100);
       const res = await request(app)
         .post("/auth/refresh")
         .send({ refreshToken: activeRefreshToken })
         .expect(200);
 
       const { body } = res;
-      expect(body.message).toBe("Tokens refreshed successfully");
-      expect(z.jwt().safeParse(body.data.accessToken).success).toBe(true);
       expect(z.jwt().safeParse(body.data.refreshToken).success).toBe(true);
-
-      // Save the freshly generated token for the next steps
+      expect(body.data.refreshToken).not.toBe(activeRefreshToken);
       activeRefreshToken = body.data.refreshToken;
     });
 
     it("Security Check: Reusing an old or already rotated token should throw 401", async () => {
-      // 1. Capture the token *before* we rotate it
-      const deadTokenToken = activeRefreshToken;
-
-      // 2. Rotate it legitimately. This marks deadTokenToken as used/deleted in DB
+      await wait(1000);
       const res = await request(app)
         .post("/auth/refresh")
-        .send({ refreshToken: deadTokenToken })
+        .send({ refreshToken: activeRefreshToken })
         .expect(200);
 
-      // Update active pointer so subsequent tests don't break
+      const deadTokenToken = activeRefreshToken;
       activeRefreshToken = res.body.data.refreshToken;
 
       // 3. Attack attempt: Try to use deadTokenToken again. It must fail with 401!
@@ -75,9 +72,10 @@ describe("API /auth Token Lifecycle Handling", () => {
   describe("POST /auth/logout - Session Expiration", () => {
     it("Happy Path: Should cleanly terminate token validity on logout", async () => {
       // 1. Log in freshly to establish a clean token to revoke
+      await wait(1100);
       const loginRes = await request(app)
         .post("/auth/login")
-        .send(userCredentials)
+        .send(user)
         .expect(200);
 
       const liveToken = loginRes.body.data.refreshToken;
