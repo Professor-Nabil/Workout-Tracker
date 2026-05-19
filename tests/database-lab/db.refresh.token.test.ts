@@ -13,7 +13,6 @@ import db from "../../src/lib/db.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import z from "zod";
-import { resolve } from "dns";
 
 /*
  * Halpers
