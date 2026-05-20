@@ -12,3 +12,7 @@ export const apiLogin = async (body: object, status: number) => {
 export const apiRefresh = async (body: object, status: number) => {
   return await request(app).post("/auth/refresh").send(body).expect(status);
 };
+
+export const apiLogout = async (body: object, status: number) => {
+  return await request(app).post("/auth/logout").send(body).expect(status);
+};
