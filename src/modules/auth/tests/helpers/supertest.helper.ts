@@ -8,3 +8,7 @@ export const apiSignup = async (body: object, status: number) => {
 export const apiLogin = async (body: object, status: number) => {
   return await request(app).post("/auth/login").send(body).expect(status);
 };
+
+export const apiRefresh = async (body: object, status: number) => {
+  return await request(app).post("/auth/refresh").send(body).expect(status);
+};
