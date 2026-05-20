@@ -7,54 +7,46 @@ import { generateTokens, hashTokenHelper } from "./helpers/generateTokens.js";
 const refreshSecret = env.JWT_REFRESH_SECRET;
 
 export const refreshService = async (incommingRefreshToken: string) => {
+  let uncoded;
+
+  // 1. ONLY catch JWT validation errors here
   try {
-    // -------------------------------------------------------------
-    // Check if incommingHashRefreshToken is valid
-    const uncoded = jwt.verify(incommingRefreshToken, refreshSecret);
-
-    if (!uncoded || typeof uncoded === "string") {
-      throw new AppError("unAuth1", 401);
-    }
-
-    // -------------------------------------------------------------
-    // Check if incommingRefreshToken in our database
-    const incommingHashRefreshToken = hashTokenHelper(incommingRefreshToken);
-
-    const result = await db.refreshToken.findUnique({
-      where: { hashRefreshToken: incommingHashRefreshToken },
-    });
-
-    if (!result) {
-      throw new AppError("unAuth2", 401);
-    }
-
-    // =============================================================
-    // NOTE: Now we can auth the user ==============================
-
-    // -------------------------------------------------------------
-    // Delete old hashRefreshToken from database
-    await db.refreshToken.delete({
-      where: { hashRefreshToken: incommingHashRefreshToken },
-    });
-
-    // -------------------------------------------------------------
-    // Generate tokens
-    const { accessToken, refreshToken, hashRefreshToken, expiresAt } =
-      await generateTokens(uncoded.id);
-
-    // -------------------------------------------------------------
-    // Save hashRefreshToken on database
-    await db.refreshToken.create({
-      data: {
-        userId: uncoded.id,
-        hashRefreshToken,
-        expiresAt,
-      },
-    });
-
-    return { accessToken, refreshToken };
-    // -------------------------------------------------------------
+    uncoded = jwt.verify(incommingRefreshToken, refreshSecret);
   } catch (err) {
-    throw new AppError("unAuth3", 401);
+    throw new AppError("Invalid or expired token signature", 401);
   }
+
+  if (!uncoded || typeof uncoded === "string") {
+    throw new AppError("Invalid token payload", 401);
+  }
+
+  // 2. Database operations go out here.
+  // If these fail, Express will naturally throw a 500 Internal Server Error, which is correct.
+  const incommingHashRefreshToken = hashTokenHelper(incommingRefreshToken);
+
+  const result = await db.refreshToken.findUnique({
+    where: { hashRefreshToken: incommingHashRefreshToken },
+  });
+
+  if (!result) {
+    throw new AppError("Token not found in database", 401);
+  }
+
+  // Delete old token and create new one (Ideally inside a db.$transaction)
+  await db.refreshToken.delete({
+    where: { hashRefreshToken: incommingHashRefreshToken },
+  });
+
+  const { accessToken, refreshToken, hashRefreshToken, expiresAt } =
+    await generateTokens(uncoded.id);
+
+  await db.refreshToken.create({
+    data: {
+      userId: uncoded.id,
+      hashRefreshToken,
+      expiresAt,
+    },
+  });
+
+  return { accessToken, refreshToken };
 };
