@@ -2,6 +2,7 @@ import { signupService } from "./serveces/signup.service.js";
 import { loginService } from "./serveces/login.service.js";
 import type { Request, Response, NextFunction } from "express";
 import { refreshService } from "./serveces/refresh.service.js";
+import { logoutService } from "./serveces/logout.service.js";
 
 export const singupController = async (
   req: Request,
@@ -87,6 +88,21 @@ export const refreshController = async (
     // -------------------------------------------------------------
     res.status(200).json(body);
     // -------------------------------------------------------------
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const logoutController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const incommingRefreshToken = req.body.refreshToken;
+    await logoutService(incommingRefreshToken);
+
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }

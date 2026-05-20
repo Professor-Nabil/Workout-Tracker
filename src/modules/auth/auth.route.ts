@@ -1,5 +1,6 @@
 import {
   loginController,
+  logoutController,
   refreshController,
   singupController,
 } from "./auth.controller.js";
@@ -11,5 +12,6 @@ const route = express.Router();
 route.post("/signup", validateMiddleware, singupController);
 route.post("/login", validateMiddleware, loginController);
 route.post("/refresh", refreshController);
+route.post("/logout", logoutController);
 
 export default route;
