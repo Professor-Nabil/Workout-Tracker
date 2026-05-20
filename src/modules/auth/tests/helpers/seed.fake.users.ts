@@ -7,7 +7,7 @@ export const seedRealUser = async () => {
 
   const hashPassword = await bcrypt.hash(password, 12);
 
-  await db.user.create({ data: { email, hashPassword } });
+  const user = await db.user.create({ data: { email, hashPassword } });
 
-  return { email, password };
+  return { email, password, id: user.id };
 };
