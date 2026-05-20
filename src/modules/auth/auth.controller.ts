@@ -1,4 +1,5 @@
-import { createUser, loginService } from "./auth.service.js";
+import { signupService } from "./serveces/signup.service.js";
+import { loginService } from "./serveces/login.service.js";
 import type { Request, Response, NextFunction } from "express";
 
 export const singupController = async (
@@ -10,7 +11,7 @@ export const singupController = async (
     // -------------------------------------------------------------
     const { email, password } = req.body;
     // -------------------------------------------------------------
-    const { user } = await createUser(email, password);
+    const { user } = await signupService(email, password);
     // -------------------------------------------------------------
     const body = {
       message: "Success signup",
