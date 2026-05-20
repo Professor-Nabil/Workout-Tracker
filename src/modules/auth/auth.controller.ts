@@ -38,7 +38,10 @@ export const loginController = async (
     // -------------------------------------------------------------
     const { email, password } = req.body;
     // -------------------------------------------------------------
-    const { user } = await loginService(email, password);
+    const { user, accessToken, refreshToken } = await loginService(
+      email,
+      password,
+    );
     // -------------------------------------------------------------
     const body = {
       message: "Success login",
@@ -47,6 +50,8 @@ export const loginController = async (
           id: user.id,
           email: user.email,
         },
+        accessToken,
+        refreshToken,
       },
     };
     // -------------------------------------------------------------
