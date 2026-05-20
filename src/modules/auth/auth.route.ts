@@ -1,4 +1,8 @@
-import { loginController, singupController } from "./auth.controller.js";
+import {
+  loginController,
+  refreshController,
+  singupController,
+} from "./auth.controller.js";
 import express from "express";
 import { validateMiddleware } from "./validate.meddleware.js";
 
@@ -6,5 +10,6 @@ const route = express.Router();
 
 route.post("/signup", validateMiddleware, singupController);
 route.post("/login", validateMiddleware, loginController);
+route.post("/refresh", refreshController);
 
 export default route;

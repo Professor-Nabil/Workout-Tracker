@@ -23,7 +23,7 @@ const myGenerateTokens = (
   );
 };
 
-const myHashToken = (token: string) => {
+export const hashTokenHelper = (token: string) => {
   return crypto.createHash("sha256").update(token).digest("hex");
 };
 
@@ -32,7 +32,7 @@ const myExpiresAt = (life: number) => new Date(Date.now() + life);
 export const generateTokens = async (userId: string) => {
   const accessToken = myGenerateTokens(userId, accessSecret, accessLife);
   const refreshToken = myGenerateTokens(userId, refreshSecret, refreshLife);
-  const hashRefreshToken = myHashToken(refreshToken);
+  const hashRefreshToken = hashTokenHelper(refreshToken);
   const expiresAt = myExpiresAt(refreshLife);
 
   return { accessToken, refreshToken, hashRefreshToken, expiresAt };
