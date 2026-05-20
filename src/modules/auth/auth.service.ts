@@ -35,7 +35,7 @@ export const loginService = async (email: string, password: string) => {
   });
 
   if (!result) {
-    throw new AppError("Wrong email or password", 404);
+    throw new AppError("Invalid email or password", 400);
   }
 
   // -------------------------------------------------------------
@@ -43,7 +43,7 @@ export const loginService = async (email: string, password: string) => {
   const isValidPasswd = await bcrypt.compare(password, result.hashPassword);
 
   if (!isValidPasswd) {
-    throw new AppError("Wrong email or password", 404);
+    throw new AppError("Invalid email or password", 400);
   }
 
   const user = { id: result.id, email: result.email };

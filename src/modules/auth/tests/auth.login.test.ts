@@ -22,8 +22,8 @@ describe("API '/auth/login'", () => {
 
   it("Should failed if email or password is wrong", async () => {
     const { email, password } = realUser1;
-    await apiLogin({ email, password: "wrongPassword" }, 404);
-    await apiLogin({ email: "wringEmail@email.com", password }, 404);
+    await apiLogin({ email, password: "wrongPassword" }, 400);
+    await apiLogin({ email: "wringEmail@email.com", password }, 400);
   });
 
   it("Should failed if email or password is missing", async () => {
