@@ -13,12 +13,12 @@ CREATE TABLE `User` (
 -- CreateTable
 CREATE TABLE `RefreshToken` (
     `id` VARCHAR(191) NOT NULL,
-    `hashToken` VARCHAR(191) NOT NULL,
+    `hashRefreshToken` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
-    `expirersAt` DATETIME(3) NOT NULL,
+    `expiresAt` DATETIME(3) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `RefreshToken_hashToken_key`(`hashToken`),
+    UNIQUE INDEX `RefreshToken_hashRefreshToken_key`(`hashRefreshToken`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

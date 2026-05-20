@@ -35,12 +35,12 @@ export const loginService = async (email: string, password: string) => {
     await generateTokens(user.id);
 
   // -------------------------------------------------------------
-  // Save hashToken on database
+  // Save hashRefreshToken on database
   await db.refreshToken.create({
     data: {
       userId: user.id,
-      hashToken: hashRefreshToken,
-      expirersAt: expiresAt,
+      hashRefreshToken,
+      expiresAt,
     },
   });
 

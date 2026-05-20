@@ -63,8 +63,8 @@ describe("### Database Health ###  RefreshToken", () => {
      * Setup Data
      */
     const token = generateToken(realUser1.id, 1000 * 60 * 60 * 24 * 7);
-    const hashToken = hashTokenHalper(token);
-    const expirersAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+    const hashRefreshToken = hashTokenHalper(token);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
     const userId = realUser1.id;
 
     /*
@@ -72,8 +72,8 @@ describe("### Database Health ###  RefreshToken", () => {
      */
     const result = await db.refreshToken.create({
       data: {
-        hashToken,
-        expirersAt,
+        hashRefreshToken,
+        expiresAt,
         userId,
       },
     });
@@ -81,7 +81,7 @@ describe("### Database Health ###  RefreshToken", () => {
     /*
      * Start testing
      */
-    expect(result.hashToken).toBe(hashToken);
+    expect(result.hashRefreshToken).toBe(hashRefreshToken);
 
     /*
      * Store refreshToken on global scope of this file
@@ -93,11 +93,13 @@ describe("### Database Health ###  RefreshToken", () => {
     /*
      * Setup Data
      */
-    const hashToken = hashTokenHalper(notHathToken1);
+    const hashRefreshToken = hashTokenHalper(notHathToken1);
     /*
      * Read RefreshToken
      */
-    const result = await db.refreshToken.findUnique({ where: { hashToken } });
+    const result = await db.refreshToken.findUnique({
+      where: { hashRefreshToken },
+    });
     /*
      * Start testing
      */
@@ -106,10 +108,10 @@ describe("### Database Health ###  RefreshToken", () => {
       expect(z.uuid().safeParse(result.id).success).toBe(true);
       // Validate user uuid
       expect(result.userId).toBe(realUser1.id);
-      // Validate hashToken
-      expect(result.hashToken).toBe(hashToken);
-      // Validate expirersAt and createdAt
-      expect(result.expirersAt.getDate()).toBeGreaterThan(
+      // Validate hashRefreshToken
+      expect(result.hashRefreshToken).toBe(hashRefreshToken);
+      // Validate expiresAt and createdAt
+      expect(result.expiresAt.getDate()).toBeGreaterThan(
         result.createdAt.getDate(),
       );
     }
@@ -119,16 +121,16 @@ describe("### Database Health ###  RefreshToken", () => {
     /*
      * Setup Data
      */
-    const hashToken = hashTokenHalper(notHathToken1);
+    const hashRefreshToken = hashTokenHalper(notHathToken1);
     /*
      * Delete old refreshToken from database
      */
-    await db.refreshToken.delete({ where: { hashToken } });
+    await db.refreshToken.delete({ where: { hashRefreshToken } });
     /*
      * Make sure the refreshToken was deleted from database
      */
     const findOldToken = await db.refreshToken.findUnique({
-      where: { hashToken },
+      where: { hashRefreshToken },
     });
     expect(findOldToken).toBe(null);
   });
@@ -139,16 +141,16 @@ describe("### Database Health ###  RefreshToken", () => {
      */
     await sleep(1100); // To make sure we have old time and now time
     const refreshToken = generateToken(realUser1.id, 1000 * 60 * 60 * 24 * 7);
-    const hashToken = hashTokenHalper(refreshToken);
-    const expirersAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+    const hashRefreshToken = hashTokenHalper(refreshToken);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
     const userId = realUser1.id;
     /*
      * Save hashRefreshToken on database
      */
     const result = await db.refreshToken.create({
       data: {
-        hashToken,
-        expirersAt,
+        hashRefreshToken,
+        expiresAt,
         userId,
       },
     });
@@ -156,6 +158,6 @@ describe("### Database Health ###  RefreshToken", () => {
      * Check if old refreshToken not equal new refreshToken
      */
     const oldHashRefreshToken = hashTokenHalper(notHathToken1);
-    expect(result.hashToken).not.toBe(oldHashRefreshToken);
+    expect(result.hashRefreshToken).not.toBe(oldHashRefreshToken);
   });
 });

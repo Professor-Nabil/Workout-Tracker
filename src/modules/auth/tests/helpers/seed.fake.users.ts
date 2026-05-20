@@ -31,21 +31,21 @@ export const seedRefreshToken = async (userId: string) => {
   );
 
   // -------------------------------------------------------------
-  // Create Hash refreshToken and expirersAt
-  const hashToken = crypto
+  // Create Hash refreshToken and expiresAt
+  const hashRefreshToken = crypto
     .createHash("sha256")
     .update(refreshToken)
     .digest("hex");
 
-  const expirersAt = new Date(Date.now() + refreshTokenLife);
+  const expiresAt = new Date(Date.now() + refreshTokenLife);
 
   // -------------------------------------------------------------
-  // Save hashToken on database
+  // Save hashRefreshToken on database
   const databaseToken = await db.refreshToken.create({
     data: {
       userId,
-      hashToken,
-      expirersAt,
+      hashRefreshToken,
+      expiresAt,
     },
   });
 
