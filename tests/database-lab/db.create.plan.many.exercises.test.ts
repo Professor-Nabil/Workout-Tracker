@@ -43,7 +43,7 @@ describe("### Database health ### Create Complex Plan", () => {
       planExercises: realExercises.map((exercise, index) => ({
         exerciseId: exercise.id,
         weight: 20 + index * 10, // 20kg, 30kg, 40kg
-        period: 90, // 90 seconds rest period
+        period: 90, // 90 Minutes
         sets: 4,
         reps: 10,
       })),
