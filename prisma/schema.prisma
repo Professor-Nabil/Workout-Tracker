@@ -49,6 +49,7 @@ model Plan {
   user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   planExercise PlanExercise[]
 
+  @@unique([title, userId])
   @@index([userId])
 }
 
