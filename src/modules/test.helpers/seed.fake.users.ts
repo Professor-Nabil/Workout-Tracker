@@ -13,13 +13,13 @@ export const seedRealUser = async () => {
 
   const user = await db.user.create({ data: { email, hashPassword } });
 
-  return { email, password, id: user.id };
+  return { email, password, id: user.id, hashPassword };
 };
 
 //==============================================================
 export const seedRefreshToken = async (userId: string) => {
   // -------------------------------------------------------------
-  // Create tokens
+  // Create refreshToken
   const refreshTokenLife = 1000 * 60 * 60 * 24 * 7;
 
   const refreshToken = jwt.sign(
@@ -27,6 +27,18 @@ export const seedRefreshToken = async (userId: string) => {
     env.JWT_REFRESH_SECRET,
     {
       expiresIn: refreshTokenLife,
+    },
+  );
+
+  // -------------------------------------------------------------
+  // Create accessToken
+  const acceessTokenLife = 1000 * 60 * 15;
+
+  const accessToken = jwt.sign(
+    { id: userId, jti: crypto.randomUUID() },
+    env.JWT_ACCESS_SECRET,
+    {
+      expiresIn: acceessTokenLife,
     },
   );
 
@@ -50,5 +62,5 @@ export const seedRefreshToken = async (userId: string) => {
   });
 
   // -------------------------------------------------------------
-  return { databaseToken, originalRefreshToken: refreshToken };
+  return { databaseToken, originalRefreshToken: refreshToken, accessToken };
 };
