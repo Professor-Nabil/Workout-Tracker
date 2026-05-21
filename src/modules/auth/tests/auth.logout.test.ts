@@ -1,5 +1,8 @@
-import { seedRealUser, seedRefreshToken } from "./helpers/seed.fake.users.js";
-import { apiLogout } from "./helpers/supertest.helper.js";
+import {
+  seedRealUser,
+  seedRefreshToken,
+} from "../../test.helpers/seed.fake.users.js";
+import { apiLogout } from "../../test.helpers/supertest.helper.js";
 
 const realUser1 = await seedRealUser();
 const realToken1 = await seedRefreshToken(realUser1.id);

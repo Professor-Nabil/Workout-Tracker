@@ -1,5 +1,5 @@
-import { apiLogin } from "./helpers/supertest.helper.js";
-import { seedRealUser } from "./helpers/seed.fake.users.js";
+import { apiLogin } from "../../test.helpers/supertest.helper.js";
+import { seedRealUser } from "../../test.helpers/seed.fake.users.js";
 import z from "zod";
 
 const realUser1 = await seedRealUser();

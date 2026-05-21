@@ -1,5 +1,5 @@
-import { apiSignup } from "./helpers/supertest.helper.js";
-import { fakeUser } from "./helpers/fake.data.helper.js";
+import { apiSignup } from "../../test.helpers/supertest.helper.js";
+import { fakeUser } from "../../test.helpers/fake.data.helper.js";
 
 describe("API '/auth/singup'", () => {
   // -------------------------------------------------------------

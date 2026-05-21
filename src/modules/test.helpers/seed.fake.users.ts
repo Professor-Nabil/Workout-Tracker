@@ -1,8 +1,8 @@
 import { fakeUser } from "./fake.data.helper.js";
-import db from "../../../../lib/db.js";
+import db from "../../lib/db.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import env from "../../../../lib/env.schema.js";
+import env from "../../lib/env.schema.js";
 import jwt from "jsonwebtoken";
 
 //==============================================================
