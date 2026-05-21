@@ -33,7 +33,7 @@ describe("### Database health ### Create Plan", () => {
   });
 
   // -------------------------------------------------------------
-  it("*** Create plan with nested exercises ***", async () => {
+  it("*** Create Plan *** with one nested Exercise", async () => {
     // -------------------------------------------------------------
     // Simiolate real requset body
     const reqBody = {
