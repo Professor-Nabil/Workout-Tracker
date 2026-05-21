@@ -7,20 +7,106 @@ datasource db {
   provider = "mysql"
 }
 
+// Parent of RefreshToken
+// Parent of Plan
 model User {
+  // Basics
   id           String         @id @default(uuid())
-  email        String         @unique
-  hashPassword String
-  refreshToken RefreshToken[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  // Fields
+  email        String         @unique
+  hashPassword String
+  // Relations
+  refreshToken RefreshToken[]
+  plan         Plan[]
 }
 
+// Child of User
 model RefreshToken {
+  // Basics
   id               String   @id @default(uuid())
+  createdAt        DateTime @default(now())
+  // Fields
   hashRefreshToken String   @unique
+  expiresAt        DateTime
+  // Relations
   userId           String
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt        DateTime
-  createdAt        DateTime @default(now())
+
+  @@index([userId])
+}
+
+// Child of User
+// Parent of PlanExercise
+model Plan {
+  // Basics
+  id           String         @id @default(uuid())
+  // Fields
+  title        String
+  // Relations
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planExercise PlanExercise[]
+
+  @@index([userId])
+}
+
+// Child of Exercise
+// Child of Plan
+model PlanExercise {
+  // Basics
+  id         String   @id @default(uuid())
+  // Fields
+  weight     Int? // KG
+  period     Int? // Minutes
+  sets       Int?
+  reps       Int?
+  // Relations
+  planId     String
+  plan       Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
+  @@index([exerciseId])
+}
+
+// Child of Category
+// Child of Tool
+// Parent of PlanExercise
+model Exercise {
+  // Basics
+  id           String         @id @default(uuid())
+  // Fields
+  name         String         @unique
+  // Relations
+  planExercise PlanExercise[]
+  categoryId   String
+  category     Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  toolId       String?
+  tool         Tool?          @relation(fields: [toolId], references: [id], onDelete: SetNull) // Safely unlinks the tool without wiping the exercise configuration
+
+  @@index([categoryId])
+  @@index([toolId])
+}
+
+// Parent of Exercise
+model Category {
+  // Basics
+  id       String     @id @default(uuid())
+  // Fields
+  name     String     @unique
+  // Relations
+  exercise Exercise[]
+}
+
+// Parent of Exercise
+model Tool {
+  // Basics
+  id       String     @id @default(uuid())
+  // Fields
+  name     String     @unique
+  // Relations
+  exercise Exercise[]
 }
