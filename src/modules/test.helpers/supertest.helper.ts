@@ -40,3 +40,9 @@ export const apiPlanReadOne = async (
     .send(body)
     .expect(status);
 };
+
+export const apiPlanReadAll = async (incommingAccessToken: string) => {
+  return await request(app)
+    .get("/plan/readall")
+    .set(`Authorization`, `Bearer ${incommingAccessToken}`);
+};
