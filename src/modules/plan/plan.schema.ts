@@ -18,4 +18,4 @@ export const planSchema = z.object({
     .min(1, "Include at least one exercise"),
 });
 
-export type PlanSchema = z.input<typeof planSchema>;
+export type PlanSchema = z.infer<typeof planSchema>;
