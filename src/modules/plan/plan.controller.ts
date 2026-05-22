@@ -5,6 +5,7 @@ import { readOnePlanService } from "./services/read.one.plan.service.js";
 import { AppError } from "../../errors/app.error.js";
 import { readManyService } from "./services/read.many.service.js";
 import { updatePlanService } from "./services/update.plan.service.js";
+import { deleteService } from "../auth/serveces/delete.service.js";
 
 export const planController = async (
   req: Request,
@@ -107,6 +108,26 @@ export const planUpdateController = async (
     };
     // -------------------------------------------------------------
     res.status(200).json(body);
+    // -------------------------------------------------------------
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const planDeleteController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    // -------------------------------------------------------------
+    let { planId } = req.params;
+    // -------------------------------------------------------------
+    planId = z.string().parse(planId);
+    // -------------------------------------------------------------
+    await deleteService(planId);
+    // -------------------------------------------------------------
+    res.sendStatus(204);
     // -------------------------------------------------------------
   } catch (err) {
     next(err);

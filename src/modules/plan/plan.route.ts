@@ -1,6 +1,7 @@
 import express from "express";
 import {
   planController,
+  planDeleteController,
   planUpdateController,
   readManyController,
   readOneController,
@@ -22,5 +23,7 @@ route.get("/readone", readOneController);
 route.get("/readmany", readManyController);
 
 route.put("/update", planUpdateValidateMiddleware, planUpdateController);
+
+route.delete("/delete/:planId", planDeleteController);
 
 export default route;
