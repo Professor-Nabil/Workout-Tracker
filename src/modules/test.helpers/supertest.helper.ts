@@ -28,3 +28,15 @@ export const apiPlanCreate = async (
     .send(body)
     .expect(status);
 };
+
+export const apiPlanReadOne = async (
+  body: object,
+  status: number,
+  incommingAccessToken: string,
+) => {
+  return await request(app)
+    .get("/plan/readone")
+    .set(`Authorization`, `Bearer ${incommingAccessToken}`)
+    .send(body)
+    .expect(status);
+};

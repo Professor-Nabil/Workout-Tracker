@@ -13,7 +13,7 @@ import { seedRefreshToken } from "../../test.helpers/seed.fake.users.js";
 import { apiPlanCreate } from "../../test.helpers/supertest.helper.js";
 import z from "zod";
 
-describe("API POST '/plan/create", () => {
+describe("### API ### POST '/plan/create", () => {
   let realUser: User;
   let dbRefreshToken: RefreshToken;
   let incommingRefreshToken: string;
