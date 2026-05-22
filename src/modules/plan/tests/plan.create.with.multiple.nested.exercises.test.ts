@@ -61,7 +61,8 @@ describe("API POST '/plan/create", () => {
 
     // -------------------------------------------------------------
     // Test Endpoint
-    const res = await apiPlanCreate(reqBody, 201);
+    const res = await apiPlanCreate(reqBody, 201, incommingAccessToken);
+    // -------------------------------------------------------------
     expect(res).toHaveProperty("body");
     expect(res.body).toHaveProperty("message");
     expect(res.body).toHaveProperty("data");
