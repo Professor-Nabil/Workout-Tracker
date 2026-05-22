@@ -11,9 +11,8 @@ import type {
 } from "../../../generated/prisma/client.js";
 import db from "../../../lib/db.js";
 import { seedRefreshToken } from "../../test.helpers/seed.fake.users.js";
-import { apiPlanReadAll } from "../../test.helpers/supertest.helper.js";
+import { apiPlanReadmany } from "../../test.helpers/supertest.helper.js";
 import { seedManyPlan } from "../../test.helpers/seed.plan.helper.js";
-import { title } from "node:process";
 
 describe("### API ### GET '/plan/readmany", () => {
   let realUser: User;
@@ -53,10 +52,14 @@ describe("### API ### GET '/plan/readmany", () => {
     // -------------------------------------------------------------
     // console.log(JSON.stringify(realUserPlanList, null, 2));
     // -------------------------------------------------------------
-    const res = await apiPlanReadAll(incommingAccessToken);
+    const res = await apiPlanReadmany(incommingAccessToken);
     // -------------------------------------------------------------
     expect(res.status).toBe(200);
+    // -------------------------------------------------------------
     expect(res.body.data.user.id).toBe(realUser.id);
-    expect(1).toBe(1);
+    // -------------------------------------------------------------
+    expect(res.body.data.plans.length).toBe(realUserPlanList.length);
+    // -------------------------------------------------------------
+    // console.log(JSON.stringify(res.body, null, 2));
   });
 });

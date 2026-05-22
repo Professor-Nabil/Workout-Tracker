@@ -3,6 +3,7 @@ import { planCreateService } from "./services/plan.create.service.js";
 import z from "zod";
 import { readOnePlanService } from "./services/read.one.plan.service.js";
 import { AppError } from "../../errors/app.error.js";
+import { readManyService } from "./services/read.many.service.js";
 
 export const planController = async (
   req: Request,
@@ -54,6 +55,33 @@ export const readOneController = async (
       },
     };
 
+    // -------------------------------------------------------------
+    res.status(200).json(body);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const readManyController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    // -------------------------------------------------------------
+    req.user = z.object({ id: z.uuid() }).parse(req.user);
+    // -------------------------------------------------------------
+    const result = await readManyService(req.user.id);
+    // -------------------------------------------------------------
+    const body = {
+      message: "Success read many plans for one usre",
+      data: {
+        user: {
+          id: result[0]?.userId,
+        },
+        plans: result,
+      },
+    };
     // -------------------------------------------------------------
     res.status(200).json(body);
   } catch (err) {
