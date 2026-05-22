@@ -69,7 +69,6 @@ describe("### API ### PUT '/plan/update", () => {
     // SIMULATE REAL PRODUCTION REQUEST BODY FROM FRONTEND
     // -------------------------------------------------------------
     const updateReqBody: PlanUpdateSchema = {
-      planId: initialPlan.id, // Fixed: Extracted from frontend contract target
       title: "Optimized Hypertrophy Push Day v2",
       planExercises: [
         {
@@ -90,6 +89,7 @@ describe("### API ### PUT '/plan/update", () => {
     };
 
     const { body } = await apiPlanUpdate(
+      initialPlan.id,
       updateReqBody,
       200,
       incommingAccessToken,
@@ -98,7 +98,7 @@ describe("### API ### PUT '/plan/update", () => {
     // --- Assertions & Verifications ---
 
     // 1. Validate Parent Table Updates
-    expect(body.data.id).toBe(updateReqBody.planId);
+    expect(body.data.id).toBe(initialPlan.id);
     expect(body.data.title).toBe(updateReqBody.title);
     expect(body.data.title).not.toBe(initialPlan.title);
 

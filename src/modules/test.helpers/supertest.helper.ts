@@ -30,14 +30,13 @@ export const apiPlanCreate = async (
 };
 
 export const apiPlanReadOne = async (
-  body: object,
+  planId: string,
   status: number,
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .get("/plans/readone")
+    .get(`/plans/${planId}`)
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
-    .send(body)
     .expect(status);
 };
 
@@ -48,12 +47,13 @@ export const apiPlanReadmany = async (incommingAccessToken: string) => {
 };
 
 export const apiPlanUpdate = async (
+  planId: string,
   body: object,
   status: number,
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .put("/plans/update")
+    .put(`/plans/${planId}`)
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .send(body)
     .expect(status);
@@ -65,7 +65,7 @@ export const apiPlanDelete = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .delete(`/plans/delete/${planId}`)
+    .delete(`/plans/${planId}`)
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .expect(status);
 };

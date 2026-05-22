@@ -20,7 +20,6 @@ export const planSchema = z.object({
 export type PlanSchema = z.infer<typeof planSchema>;
 
 export const planUpdateSchema = z.object({
-  planId: z.uuid(),
   title: z.string().min(3).max(100),
   planExercises: z.array(
     z.union([

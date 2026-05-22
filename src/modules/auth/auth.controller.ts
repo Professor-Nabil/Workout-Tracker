@@ -1,8 +1,8 @@
-import { signupService } from "./serveces/signup.service.js";
-import { loginService } from "./serveces/login.service.js";
+import { signupService } from "./services/signup.service.js";
+import { loginService } from "./services/login.service.js";
 import type { Request, Response, NextFunction } from "express";
-import { refreshService } from "./serveces/refresh.service.js";
-import { logoutService } from "./serveces/logout.service.js";
+import { refreshService } from "./services/refresh.service.js";
+import { logoutService } from "./services/logout.service.js";
 
 export const singupController = async (
   req: Request,

@@ -1,32 +1,36 @@
 import express from "express";
 import {
   createPlanController,
-  planDeleteController,
-  planUpdateController,
+  deletePlanController,
+  updatePlanController,
   readManyController,
   readOneController,
 } from "./plan.controller.js";
 import {
   planUpdateValidateMiddleware,
   planValidateMiddleware,
-} from "./validage.middeware.js";
-import { planAuthMiddleware } from "./plan.auth.middelware.js";
+} from "./validate.middleware.js";
+import { planAuthMiddleware } from "./plan.auth.middleware.js";
 
 const route = express.Router();
 
+// Protect all workout plan endpoints with your authentication guard
 route.use(planAuthMiddleware);
 
-// -------------------------------------------------------------
-
-route.get("/", readManyController);
-
-route.get("/readone", readOneController);
-
+// 1. CREATE a brand new plan
 route.post("/", planValidateMiddleware, createPlanController);
 
-route.put("/update", planUpdateValidateMiddleware, planUpdateController);
+// 2. READ ALL plans belonging to the authenticated user
+route.get("/", readManyController);
 
-route.delete("/delete/:planId", planDeleteController);
+// 3. READ ONE specific plan by its ID
+route.get("/:planId", readOneController);
+
+// 4. UPDATE a specific plan completely by its ID
+route.put("/:planId", planUpdateValidateMiddleware, updatePlanController);
+
+// 5. DELETE a specific plan by its ID
+route.delete("/:planId", deletePlanController);
 
 // -------------------------------------------------------------
 

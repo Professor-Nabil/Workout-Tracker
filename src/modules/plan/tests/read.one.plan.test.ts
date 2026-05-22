@@ -51,11 +51,7 @@ describe("### API ### GET '/plan/readone", () => {
     // -------------------------------------------------------------
     // console.log(realPalan);
     // -------------------------------------------------------------
-    const res = await apiPlanReadOne(
-      { planId: realPalan.id },
-      200,
-      incommingAccessToken,
-    );
+    const res = await apiPlanReadOne(realPalan.id, 200, incommingAccessToken);
     // -------------------------------------------------------------
     expect(res.body.data.user.id).toBe(realUser.id);
     expect(res.body.data.plan.id).toBe(realPalan.id);

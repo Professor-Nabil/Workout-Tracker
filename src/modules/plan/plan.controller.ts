@@ -5,7 +5,7 @@ import { readOnePlanService } from "./services/read.one.plan.service.js";
 import { AppError } from "../../errors/app.error.js";
 import { readManyService } from "./services/read.many.service.js";
 import { updatePlanService } from "./services/update.plan.service.js";
-import { deleteService } from "../auth/serveces/delete.service.js";
+import { deleteService } from "../auth/services/delete.service.js";
 
 export const createPlanController = async (
   req: Request,
@@ -41,7 +41,10 @@ export const readOneController = async (
     // -------------------------------------------------------------
     req.user = z.object({ id: z.uuid() }).parse(req.user);
     // -------------------------------------------------------------
-    const result = await readOnePlanService(req.user.id, req.body.planId);
+    let { planId } = req.params;
+    planId = z.string().parse(planId);
+    // -------------------------------------------------------------
+    const result = await readOnePlanService(req.user.id, planId);
     // -------------------------------------------------------------
     if (!result) {
       throw new AppError("Plan not found", 404);
@@ -91,7 +94,7 @@ export const readManyController = async (
   }
 };
 
-export const planUpdateController = async (
+export const updatePlanController = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -100,7 +103,10 @@ export const planUpdateController = async (
     // -------------------------------------------------------------
     req.user = z.object({ id: z.uuid() }).parse(req.user);
     // -------------------------------------------------------------
-    const result = await updatePlanService(req.body);
+    let { planId } = req.params;
+    planId = z.string().parse(planId);
+    // -------------------------------------------------------------
+    const result = await updatePlanService(planId, req.body);
     // -------------------------------------------------------------
     const body = {
       message: "Success read many plans for one usre",
@@ -114,7 +120,7 @@ export const planUpdateController = async (
   }
 };
 
-export const planDeleteController = async (
+export const deletePlanController = async (
   req: Request,
   res: Response,
   next: NextFunction,
