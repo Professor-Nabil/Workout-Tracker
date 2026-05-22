@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/auth", authRoute);
-app.use("/plan", planRoute);
+app.use("/plans", planRoute);
 
 app.use(globalError);
 

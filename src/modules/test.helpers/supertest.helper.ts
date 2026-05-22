@@ -23,7 +23,7 @@ export const apiPlanCreate = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .post("/plan/create")
+    .post("/plans")
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .send(body)
     .expect(status);
@@ -35,7 +35,7 @@ export const apiPlanReadOne = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .get("/plan/readone")
+    .get("/plans/readone")
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .send(body)
     .expect(status);
@@ -43,7 +43,7 @@ export const apiPlanReadOne = async (
 
 export const apiPlanReadmany = async (incommingAccessToken: string) => {
   return await request(app)
-    .get("/plan/readmany")
+    .get("/plans")
     .set(`Authorization`, `Bearer ${incommingAccessToken}`);
 };
 
@@ -53,7 +53,7 @@ export const apiPlanUpdate = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .put("/plan/update")
+    .put("/plans/update")
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .send(body)
     .expect(status);
@@ -65,7 +65,7 @@ export const apiPlanDelete = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .delete(`/plan/delete/${planId}`)
+    .delete(`/plans/delete/${planId}`)
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .expect(status);
 };

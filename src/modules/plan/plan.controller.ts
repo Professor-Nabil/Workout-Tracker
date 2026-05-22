@@ -7,7 +7,7 @@ import { readManyService } from "./services/read.many.service.js";
 import { updatePlanService } from "./services/update.plan.service.js";
 import { deleteService } from "../auth/serveces/delete.service.js";
 
-export const planController = async (
+export const createPlanController = async (
   req: Request,
   res: Response,
   next: NextFunction,

@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  planController,
+  createPlanController,
   planDeleteController,
   planUpdateController,
   readManyController,
@@ -16,14 +16,18 @@ const route = express.Router();
 
 route.use(planAuthMiddleware);
 
-route.post("/create", planValidateMiddleware, planController);
+// -------------------------------------------------------------
+
+route.get("/", readManyController);
 
 route.get("/readone", readOneController);
 
-route.get("/readmany", readManyController);
+route.post("/", planValidateMiddleware, createPlanController);
 
 route.put("/update", planUpdateValidateMiddleware, planUpdateController);
 
 route.delete("/delete/:planId", planDeleteController);
+
+// -------------------------------------------------------------
 
 export default route;
