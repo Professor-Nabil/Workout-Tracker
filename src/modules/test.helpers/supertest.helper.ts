@@ -58,3 +58,14 @@ export const apiPlanUpdate = async (
     .send(body)
     .expect(status);
 };
+
+export const apiPlanDelete = async (
+  planId: string,
+  status: number,
+  incommingAccessToken: string,
+) => {
+  return await request(app)
+    .delete(`/plan/delete/${planId}`)
+    .set(`Authorization`, `Bearer ${incommingAccessToken}`)
+    .expect(status);
+};
