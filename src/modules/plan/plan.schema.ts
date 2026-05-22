@@ -18,3 +18,21 @@ export const planSchema = z.object({
 });
 
 export type PlanSchema = z.infer<typeof planSchema>;
+
+export const planUpdateSchema = z.object({
+  planId: z.uuid(),
+  title: z.string().min(3).max(100),
+  planExercises: z.array(
+    z.union([
+      z.object({
+        exerciseId: z.uuid(),
+        weight: z.coerce.number().optional(),
+        sets: z.coerce.number().optional(),
+        reps: z.coerce.number().optional(),
+        period: z.coerce.number().optional(),
+      }),
+    ]),
+  ),
+});
+
+export type PlanUpdateSchema = z.infer<typeof planUpdateSchema>;
