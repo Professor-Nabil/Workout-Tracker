@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import env from "../../lib/env.schema.js";
 import { AppError } from "../../errors/app.error.js";
+import z from "zod";
 
 // 1. Declare custom property typing for Express Request interface
 interface CustomJwtPayload extends jwt.JwtPayload {
@@ -39,15 +40,14 @@ export const planAuthMiddleware = async (
     }
 
     // 3. Verify the token and cast the inner payload structure safely
-    const decoded = jwt.verify(
-      token,
-      env.JWT_ACCESS_SECRET,
-    ) as CustomJwtPayload;
+    const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET); // as CustomJwtPayload;
 
     // 4. Attach the user identity payload directly to the request cycle context
-    req.user = {
-      id: decoded.id,
-    };
+    req.user = z.object({ id: z.uuid() }).parse(decoded);
+    console.log(req.user.id);
+    // req.user = {
+    //   id: decoded.id,
+    // };
 
     next();
   } catch (err) {

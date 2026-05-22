@@ -1,10 +1,10 @@
 import db from "../../../lib/db.js";
 import type { PlanSchema } from "../plan.schema.js";
 
-export const planCreateService = async (plan: PlanSchema) => {
+export const planCreateService = async (plan: PlanSchema, userId: string) => {
   const result = await db.plan.create({
     data: {
-      userId: plan.userId,
+      userId,
       title: plan.title,
       planExercise: {
         createMany: {

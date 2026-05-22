@@ -5,7 +5,7 @@ import { AppError } from "../../errors/app.error.js";
 
 export const planValidateMiddleware = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   try {

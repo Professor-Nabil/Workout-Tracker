@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const planSchema = z.object({
   title: z.string().min(3).max(100),
-  userId: z.uuid(),
   planExercises: z
     .array(
       z.union([

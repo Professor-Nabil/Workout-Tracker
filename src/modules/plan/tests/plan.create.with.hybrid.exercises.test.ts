@@ -1,4 +1,5 @@
 /*
+ * ### API ### POST '/plan/create
  * *** Create Plan *** with Hybrid Exercises (Cardio + Strength)
  */
 import { faker } from "@faker-js/faker";
