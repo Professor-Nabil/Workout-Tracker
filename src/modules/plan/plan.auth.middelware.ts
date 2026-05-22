@@ -44,7 +44,6 @@ export const planAuthMiddleware = async (
 
     // 4. Attach the user identity payload directly to the request cycle context
     req.user = z.object({ id: z.uuid() }).parse(decoded);
-    console.log(req.user.id);
     // req.user = {
     //   id: decoded.id,
     // };

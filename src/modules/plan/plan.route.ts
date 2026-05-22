@@ -1,5 +1,5 @@
 import express from "express";
-import { planController } from "./plan.controller.js";
+import { planController, readOneController } from "./plan.controller.js";
 import { planValidateMiddleware } from "./validage.middeware.js";
 import { planAuthMiddleware } from "./plan.auth.middelware.js";
 
@@ -11,5 +11,7 @@ route.post(
   planValidateMiddleware,
   planController,
 );
+
+route.get("/readone", planAuthMiddleware, readOneController);
 
 export default route;
