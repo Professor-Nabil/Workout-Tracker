@@ -1,3 +1,6 @@
+/*
+ * *** Create Plan *** with one nested Exercise
+ */
 import { faker } from "@faker-js/faker";
 import type {
   User,
@@ -9,7 +12,7 @@ import { seedRefreshToken } from "../../test.helpers/seed.fake.users.js";
 import { apiPlanCreate } from "../../test.helpers/supertest.helper.js";
 import z from "zod";
 
-describe("API '/plan/create", () => {
+describe("API POST '/plan/create", () => {
   let realUser: User;
   let dbRefreshToken: RefreshToken;
   let incommingRefreshToken: string;
@@ -35,12 +38,7 @@ describe("API '/plan/create", () => {
     const ex = await db.exercise.findFirst();
     if (ex) realExercise = ex;
   });
-  it("Should success create new plan with one exersice", async () => {
-    // console.log(realUser);
-    // console.log(dbRefreshToken);
-    // console.log(incommingRefreshToken);
-    // console.log(incommingAccessToken);
-
+  it("*** Create Plan *** with one nested Exercise", async () => {
     // -------------------------------------------------------------
     // Simiolate real requset body
     const reqBody = {
