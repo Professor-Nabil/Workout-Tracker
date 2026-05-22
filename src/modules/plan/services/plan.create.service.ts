@@ -1,7 +1,7 @@
 import db from "../../../lib/db.js";
-import type { CreateWorkoutPlanInput } from "../plan.schema.js";
+import type { PlanSchema } from "../plan.schema.js";
 
-export const planCreateService = async (plan: CreateWorkoutPlanInput) => {
+export const planCreateService = async (plan: PlanSchema) => {
   const result = await db.plan.create({
     data: {
       userId: plan.userId,
