@@ -46,3 +46,15 @@ export const apiPlanReadmany = async (incommingAccessToken: string) => {
     .get("/plan/readmany")
     .set(`Authorization`, `Bearer ${incommingAccessToken}`);
 };
+
+export const apiPlanUpdate = async (
+  body: object,
+  status: number,
+  incommingAccessToken: string,
+) => {
+  return await request(app)
+    .put("/plan/update")
+    .set(`Authorization`, `Bearer ${incommingAccessToken}`)
+    .send(body)
+    .expect(status);
+};
