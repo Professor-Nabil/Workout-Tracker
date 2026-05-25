@@ -38,11 +38,11 @@ export const refreshService = async (incommingRefreshToken: string) => {
   });
 
   const { accessToken, refreshToken, hashRefreshToken, expiresAt } =
-    await generateTokens(uncoded.id);
+    await generateTokens(uncoded.userId);
 
   await db.refreshToken.create({
     data: {
-      userId: uncoded.id,
+      userId: uncoded.userId,
       hashRefreshToken,
       expiresAt,
     },

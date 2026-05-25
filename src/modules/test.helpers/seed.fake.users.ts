@@ -23,7 +23,7 @@ export const seedRefreshToken = async (userId: string) => {
   const refreshTokenLife = 1000 * 60 * 60 * 24 * 7;
 
   const refreshToken = jwt.sign(
-    { id: userId, jti: crypto.randomUUID() },
+    { userId, jti: crypto.randomUUID() },
     env.JWT_REFRESH_SECRET,
     {
       expiresIn: refreshTokenLife,
@@ -35,7 +35,7 @@ export const seedRefreshToken = async (userId: string) => {
   const acceessTokenLife = 1000 * 60 * 15;
 
   const accessToken = jwt.sign(
-    { id: userId, jti: crypto.randomUUID() },
+    { userId, jti: crypto.randomUUID() },
     env.JWT_ACCESS_SECRET,
     {
       expiresIn: acceessTokenLife,

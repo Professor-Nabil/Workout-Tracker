@@ -6,14 +6,14 @@ import z from "zod";
 
 // 1. Declare custom property typing for Express Request interface
 interface CustomJwtPayload extends jwt.JwtPayload {
-  id: string;
+  userId: string;
 }
 
 declare global {
   namespace Express {
     interface Request {
       user?: {
-        id: string;
+        userId: string;
       };
     }
   }
@@ -43,7 +43,7 @@ export const planAuthMiddleware = async (
     const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET); // as CustomJwtPayload;
 
     // 4. Attach the user identity payload directly to the request cycle context
-    req.user = z.object({ id: z.uuid() }).parse(decoded);
+    req.user = z.object({ userId: z.uuid() }).parse(decoded);
     // req.user = {
     //   id: decoded.id,
     // };
@@ -53,6 +53,10 @@ export const planAuthMiddleware = async (
     if (err instanceof jwt.JsonWebTokenError) {
       // 5. Fixed standard 401 status target fallback error handling
       next(new AppError("Invalid or expired session token", 401));
+    }
+    if (err instanceof z.ZodError) {
+      err = new AppError("Invalid jwt payload", 401, err.issues);
+      next(err);
     } else {
       next(err);
     }

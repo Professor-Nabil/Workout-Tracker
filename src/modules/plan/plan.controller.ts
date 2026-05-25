@@ -14,9 +14,9 @@ export const createPlanController = async (
 ) => {
   try {
     // -------------------------------------------------------------
-    req.user = z.object({ id: z.uuid() }).parse(req.user);
+    req.user = z.object({ userId: z.uuid() }).parse(req.user);
     // -------------------------------------------------------------
-    const result = await planCreateService(req.body, req.user.id);
+    const result = await planCreateService(req.body, req.user.userId);
     // -------------------------------------------------------------
     const body = {
       message: "Created plan succussfully",
@@ -39,12 +39,12 @@ export const readOneController = async (
 ) => {
   try {
     // -------------------------------------------------------------
-    req.user = z.object({ id: z.uuid() }).parse(req.user);
+    req.user = z.object({ userId: z.uuid() }).parse(req.user);
     // -------------------------------------------------------------
     let { planId } = req.params;
     planId = z.string().parse(planId);
     // -------------------------------------------------------------
-    const result = await readOnePlanService(req.user.id, planId);
+    const result = await readOnePlanService(req.user.userId, planId);
     // -------------------------------------------------------------
     if (!result) {
       throw new AppError("Plan not found", 404);
@@ -73,9 +73,9 @@ export const readManyController = async (
 ) => {
   try {
     // -------------------------------------------------------------
-    req.user = z.object({ id: z.uuid() }).parse(req.user);
+    req.user = z.object({ userId: z.uuid() }).parse(req.user);
     // -------------------------------------------------------------
-    const result = await readManyService(req.user.id);
+    const result = await readManyService(req.user.userId);
     // -------------------------------------------------------------
     const body = {
       message: "Success read many plans for one usre",
@@ -100,7 +100,7 @@ export const updatePlanController = async (
 ) => {
   try {
     // -------------------------------------------------------------
-    req.user = z.object({ id: z.uuid() }).parse(req.user);
+    // req.user = z.object({ userId: z.uuid() }).parse(req.user);
     // -------------------------------------------------------------
     let { planId } = req.params;
     planId = z.string().parse(planId);
