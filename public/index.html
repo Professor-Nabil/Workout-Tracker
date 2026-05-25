@@ -2,51 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
+    <title>Home Page</title>
     <script defer src="/index.js"></script>
     <script defer src="/alpine.min.js"></script>
   </head>
   <body x-data="alpineData">
-    <!-- ------------------------------------------------------------- -->
-    <!-- Create New user ------------------------------------------------------------- -->
-    <hr />
-    <form @submit.prevent="signup()">
-      <p>Enter your new email</p>
-      <input x-model="signupData.email" type="text" /><br />
-
-      <p>Enter your password</p>
-      <input x-model="signupData.password" type="text" /><br /><br />
-
-      <button type="submit">Signup</button>
-    </form>
-    <hr />
-
-    <!-- ------------------------------------------------------------- -->
-    <!-- Login user  ------------------------------------------------------------- -->
-    <hr />
-    <form @submit.prevent="login()">
-      <p>Enter your new email</p>
-      <input x-model="loginData.email" type="text" /><br />
-
-      <p>Enter your password</p>
-      <input x-model="loginData.password" type="text" /><br /><br />
-
-      <button type="submit">Signup</button>
-    </form>
-    <hr />
-    <br />
-
-    <!-- ------------------------------------------------------------- -->
-    <!-- Refresh Token ------------------------------------------------------------- -->
-    <button @click="refresh()">Test Refresh Token</button>
-    <hr />
-    <br />
-
-    <!-- Logout ------------------------------------------------------------- -->
-    <!-- ------------------------------------------------------------- -->
-    <button @click="logout()">Logout</button>
-    <br />
-    <p x-text="userData.accessToken"></p>
-    <p x-text="userData.refreshToken"></p>
+    <li><a href="/auth/signup/signup.html">Signup</a></li>
+    <li><a href="/auth/login/login.html">Login</a></li>
+    <li><a href="/auth/refresh/refresh.html">refresh</a></li>
+    <li><a href="/auth/logout/logout.html">Logout</a></li>
   </body>
 </html>
