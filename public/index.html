@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script defer src="/index.js"></script>
+    <script defer src="/alpine.min.js"></script>
+  </head>
+  <body x-data="alpineData">
+    <!-- ------------------------------------------------------------- -->
+    <!-- Create New user ------------------------------------------------------------- -->
+    <hr />
+    <form @submit.prevent="signup()">
+      <p>Enter your new email</p>
+      <input x-model="signupData.email" type="text" /><br />
+
+      <p>Enter your password</p>
+      <input x-model="signupData.password" type="text" /><br /><br />
+
+      <button type="submit">Signup</button>
+    </form>
+    <hr />
+
+    <!-- ------------------------------------------------------------- -->
+    <!-- Login user  ------------------------------------------------------------- -->
+    <hr />
+    <form @submit.prevent="login()">
+      <p>Enter your new email</p>
+      <input x-model="loginData.email" type="text" /><br />
+
+      <p>Enter your password</p>
+      <input x-model="loginData.password" type="text" /><br /><br />
+
+      <button type="submit">Signup</button>
+    </form>
+    <hr />
+    <br />
+
+    <!-- ------------------------------------------------------------- -->
+    <!-- Refresh Token ------------------------------------------------------------- -->
+    <button @click="refresh()">Test Refresh Token</button>
+    <hr />
+    <br />
+
+    <!-- Logout ------------------------------------------------------------- -->
+    <!-- ------------------------------------------------------------- -->
+    <button @click="logout()">Logout</button>
+    <br />
+    <p x-text="userData.accessToken"></p>
+    <p x-text="userData.refreshToken"></p>
+  </body>
+</html>
