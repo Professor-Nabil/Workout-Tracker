@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+    <script defer src="/storage.service.js"></script>
+    <script defer src="/auth/login/login.js"></script>
+    <script defer src="/alpine.min.js"></script>
+  </head>
+  <body x-data="alpineData">
+    <li><a href="/">Home</a></li>
+    <!-- ------------------------------------------------------------- -->
+    <!-- Login user  ------------------------------------------------- -->
+    <hr />
+    <form @submit.prevent="login()">
+      <p>Enter your new email</p>
+      <input x-model="loginData.email" type="text" /><br />
+
+      <p>Enter your password</p>
+      <input x-model="loginData.password" type="text" /><br /><br />
+
+      <button type="submit">Signup</button>
+    </form>
+    <hr />
+    <br />
+
+    <!-- ------------------------------------------------------------- -->
+  </body>
+</html>
