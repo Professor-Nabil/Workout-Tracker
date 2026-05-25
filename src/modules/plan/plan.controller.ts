@@ -59,7 +59,6 @@ export const readOneController = async (
         plan: result,
       },
     };
-
     // -------------------------------------------------------------
     res.status(200).json(body);
   } catch (err) {
@@ -109,7 +108,7 @@ export const updatePlanController = async (
     const result = await updatePlanService(planId, req.body);
     // -------------------------------------------------------------
     const body = {
-      message: "Success read many plans for one usre",
+      message: "Success update plan",
       data: result,
     };
     // -------------------------------------------------------------
