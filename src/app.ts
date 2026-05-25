@@ -7,8 +7,8 @@ const app = express();
 
 app.use(express.json());
 
-app.use("/auth", authRoute);
-app.use("/plans", planRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/plans", planRoute);
 
 app.use(globalError);
 

@@ -2,19 +2,19 @@ import request from "supertest";
 import app from "../../app.js";
 
 export const apiSignup = async (body: object, status: number) => {
-  return await request(app).post("/auth/signup").send(body).expect(status);
+  return await request(app).post("/api/auth/signup").send(body).expect(status);
 };
 
 export const apiLogin = async (body: object, status: number) => {
-  return await request(app).post("/auth/login").send(body).expect(status);
+  return await request(app).post("/api/auth/login").send(body).expect(status);
 };
 
 export const apiRefresh = async (body: object, status: number) => {
-  return await request(app).post("/auth/refresh").send(body).expect(status);
+  return await request(app).post("/api/auth/refresh").send(body).expect(status);
 };
 
 export const apiLogout = async (body: object, status: number) => {
-  return await request(app).post("/auth/logout").send(body).expect(status);
+  return await request(app).post("/api/auth/logout").send(body).expect(status);
 };
 
 export const apiPlanCreate = async (
@@ -23,7 +23,7 @@ export const apiPlanCreate = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .post("/plans")
+    .post("/api/plans")
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .send(body)
     .expect(status);
@@ -35,14 +35,14 @@ export const apiPlanReadOne = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .get(`/plans/${planId}`)
+    .get(`/api/plans/${planId}`)
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .expect(status);
 };
 
 export const apiPlanReadmany = async (incommingAccessToken: string) => {
   return await request(app)
-    .get("/plans")
+    .get("/api/plans")
     .set(`Authorization`, `Bearer ${incommingAccessToken}`);
 };
 
@@ -53,7 +53,7 @@ export const apiPlanUpdate = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .put(`/plans/${planId}`)
+    .put(`/api/plans/${planId}`)
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .send(body)
     .expect(status);
@@ -65,7 +65,7 @@ export const apiPlanDelete = async (
   incommingAccessToken: string,
 ) => {
   return await request(app)
-    .delete(`/plans/${planId}`)
+    .delete(`/api/plans/${planId}`)
     .set(`Authorization`, `Bearer ${incommingAccessToken}`)
     .expect(status);
 };
