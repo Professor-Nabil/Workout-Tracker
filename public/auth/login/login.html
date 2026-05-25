@@ -9,20 +9,20 @@
   </head>
   <body x-data="alpineData">
     <li><a href="/">Home</a></li>
+    <hr />
+    <h3>Login</h3>
+    <hr />
     <!-- ------------------------------------------------------------- -->
     <!-- Login user  ------------------------------------------------- -->
-    <hr />
     <form @submit.prevent="login()">
-      <p>Enter your new email</p>
+      <p>Enter your email</p>
       <input x-model="loginData.email" type="text" /><br />
 
       <p>Enter your password</p>
       <input x-model="loginData.password" type="text" /><br /><br />
 
-      <button type="submit">Signup</button>
+      <button type="submit">Login</button>
     </form>
-    <hr />
-    <br />
 
     <!-- ------------------------------------------------------------- -->
   </body>
