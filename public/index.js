@@ -10,14 +10,22 @@ document.addEventListener("alpine:init", () => {
       email: "",
       password: "",
     },
-    userData: {
-      accessToken: "",
-      refreshToken: "",
-    },
 
     // -------------------------------------------------------------
-    // Start -------------------------------------------------------
-    init() {},
+    // Local Storage -----------------------------------------------
+    dbNmae: "GciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+    saveTokens(accessToken, refreshToken) {
+      localStorage.setItem(
+        this.dbNmae,
+        JSON.stringify({ accessToken, refreshToken }),
+      );
+    },
+    readTokens() {
+      return JSON.parse(localStorage.getItem(this.dbNmae)) || "";
+    },
+    deleteTokens() {
+      return localStorage.removeItem(this.dbNmae) || "";
+    },
 
     // -------------------------------------------------------------
     // Signup ------------------------------------------------------
@@ -53,8 +61,9 @@ document.addEventListener("alpine:init", () => {
       const result = await res.json();
 
       if (res.status === 200) {
-        this.userData.accessToken = result.data.accessToken;
-        this.userData.refreshToken = result.data.refreshToken;
+        // this.userData.accessToken = result.data.accessToken;
+        // this.userData.refreshToken = result.data.refreshToken;
+        this.saveTokens(result.data.accessToken, result.data.refreshToken);
       }
 
       console.clear();
@@ -69,15 +78,16 @@ document.addEventListener("alpine:init", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          refreshToken: this.userData.refreshToken,
+          refreshToken: this.readTokens().refreshToken,
         }),
       });
 
       const result = await res.json();
 
       if (res.status === 200) {
-        this.userData.accessToken = result.data.accessToken;
-        this.userData.refreshToken = result.data.refreshToken;
+        // this.userData.accessToken = result.data.accessToken;
+        // this.userData.refreshToken = result.data.refreshToken;
+        this.saveTokens(result.data.accessToken, result.data.refreshToken);
       }
 
       console.clear();
@@ -92,18 +102,16 @@ document.addEventListener("alpine:init", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          refreshToken: this.userData.refreshToken,
+          refreshToken: this.readTokens().refreshToken,
         }),
       });
 
       if (res.status === 204) {
-        this.userData.accessToken = "";
-        this.userData.refreshToken = "";
+        this.deleteTokens();
       }
 
       console.clear();
       console.log(res.status);
-      console.log(JSON.stringify(this.userData, null, 2));
     },
   }));
 });
