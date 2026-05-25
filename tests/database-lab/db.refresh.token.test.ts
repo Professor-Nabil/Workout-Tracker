@@ -111,8 +111,8 @@ describe("### Database Health ###  RefreshToken", () => {
       // Validate hashRefreshToken
       expect(result.hashRefreshToken).toBe(hashRefreshToken);
       // Validate expiresAt and createdAt
-      expect(result.expiresAt.getDate()).toBeGreaterThan(
-        result.createdAt.getDate(),
+      expect(result.expiresAt.getTime()).toBeGreaterThan(
+        result.createdAt.getTime(),
       );
     }
   });
