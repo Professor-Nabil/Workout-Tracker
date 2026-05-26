@@ -34,9 +34,7 @@ export const updatePlanService = async (
       },
       include: {
         planExercise: {
-          orderBy: {
-            weight: "asc",
-          },
+          include: { exercise: { include: { category: true, tool: true } } },
         },
       },
     });
