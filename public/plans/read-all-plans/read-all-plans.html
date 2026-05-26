@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Workout Plans</title>
+    <script defer src="/storage.service.js"></script>
+    <script defer src="/plans/read-all-plans/read-all-plans.js"></script>
+    <script defer src="/alpine.min.js"></script>
+  </head>
+  <body x-data="alpineData">
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+    <hr />
+
+    <h3>My Workout Plans Inventory</h3>
+    <hr />
+
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <template x-for="plan in plans" :key="plan.id">
+        <div
+          style="
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #fafafa;
+          "
+        >
+          <h4 style="margin: 0 0 5px 0; color: #333" x-text="plan.title"></h4>
+          <small
+            style="color: #666; font-family: monospace"
+            x-text="'Plan UUID: ' + plan.id"
+          ></small>
+
+          <h5 style="margin: 15px 0 5px 0">Exercises included:</h5>
+
+          <table
+            border="1"
+            cellpadding="6"
+            style="border-collapse: collapse; background: white"
+          >
+            <thead>
+              <tr style="background: #f0f0f0">
+                <th>Exercise ID (Reference Key)</th>
+                <th>Weight Load</th>
+                <th>Target Sets</th>
+                <th>Target Reps</th>
+                <th>Target Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="ex in plan.planExercise" :key="ex.id">
+                <tr>
+                  <td
+                    x-text="ex.exerciseId"
+                    style="
+                      font-family: monospace;
+                      font-size: 0.9em;
+                      color: #555;
+                    "
+                  ></td>
+                  <td x-text="ex.weight + ' kg'"></td>
+                  <td x-text="ex.sets"></td>
+                  <td x-text="ex.reps"></td>
+                  <td x-text="ex.period"></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </template>
+    </div>
+
+    <template x-if="plans.length === 0">
+      <p>No plans found. Go create a plan to start viewing it here!</p>
+    </template>
+  </body>
+</html>

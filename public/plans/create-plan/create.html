@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Create New Workout Plan</title>
     <script defer src="/storage.service.js"></script>
-    <script defer src="/plans/create/create.js"></script>
+    <script defer src="/plans/create-plan/create.js"></script>
     <script defer src="/alpine.min.js"></script>
   </head>
   <body x-data="alpineData">
@@ -34,17 +34,22 @@
 
             <label>
               Weight (kg):
-              <input x-model="elm.weight" type="text" style="width: 60px" />
+              <input x-model="elm.weight" type="text"/>
             </label>
 
             <label>
               Sets:
-              <input x-model="elm.sets" type="text" style="width: 50px" />
+              <input x-model="elm.sets" type="text"/>
             </label>
 
             <label>
               Reps:
-              <input x-model="elm.reps" type="text" style="width: 50px" />
+              <input x-model="elm.reps" type="text"/>
+            </label>
+
+            <label>
+              Period (minutes):
+              <input x-model="elm.period" type="text"" />
             </label>
 
             <button @click="removeExerciseElement(index)">Remove</button>

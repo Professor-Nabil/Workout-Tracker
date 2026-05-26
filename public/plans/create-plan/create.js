@@ -12,6 +12,7 @@ document.addEventListener("alpine:init", () => {
           weight: 60,
           sets: 3,
           reps: 10,
+          period: 20,
         },
       ],
     },
@@ -42,6 +43,7 @@ document.addEventListener("alpine:init", () => {
         weight: 60,
         sets: 3,
         reps: 10,
+        period: 20,
       });
     },
 
