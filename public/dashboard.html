@@ -3,83 +3,63 @@
   <head>
     <meta charset="UTF-8" />
     <title>Workout Hub Dashboard</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="/tailwind.min.js"></script>
     <script defer src="/storage.service.js"></script>
     <script defer src="/dashboard.js"></script>
     <script defer src="/alpine.min.js"></script>
   </head>
   <body
     x-data="dashboardController"
-    style="
-      font-family: sans-serif;
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 0 15px;
-    "
+    class="bg-gray-50 font-sans max-w-4xl mx-auto px-4 py-6 text-gray-800"
   >
     <header
-      style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 10px;
-      "
+      class="flex justify-between items-center border-b-2 border-gray-200 pb-3 mb-6"
     >
-      <h2>💪 Workout Hub Control Center</h2>
+      <h2 class="text-2xl font-bold text-gray-900">
+        💪 Workout Hub Control Center
+      </h2>
       <button
         @click="logout()"
-        style="
-          background: #dc3545;
-          color: white;
-          border: none;
-          padding: 8px 16px;
-          border-radius: 4px;
-          cursor: pointer;
-        "
+        class="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-md shadow-sm transition-colors duration-200 cursor-pointer"
       >
         Secure Logout
       </button>
     </header>
 
     <section
-      style="
-        margin: 25px 0;
-        padding: 20px;
-        border: 1px dashed #28a745;
-        border-radius: 6px;
-        background: #fdfdfd;
-      "
+      class="my-6 p-5 border border-dashed border-green-600 rounded-lg bg-emerald-50/30"
     >
-      <h3>🆕 Design a New Training Plan</h3>
+      <h3 class="text-lg font-bold text-green-800 mb-4">
+        🆕 Design a New Training Plan
+      </h3>
       <form @submit.prevent="createNewPlan()">
-        <div style="margin-bottom: 15px">
+        <div class="mb-4">
           <input
             type="text"
             x-model="newPlanForm.title"
             placeholder="Plan Title (e.g. Hypertrophy Push Day)"
             required
-            style="width: 300px; padding: 8px; font-size: 1em"
+            class="w-full max-w-xs p-2 text-base border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
           />
         </div>
 
-        <h5>Assigned Exercises</h5>
-        <div style="display: flex; flex-direction: column; gap: 10px">
+        <h5 class="text-sm font-semibold text-gray-700 mb-2">
+          Assigned Exercises
+        </h5>
+        <div class="flex flex-col gap-2.5">
           <template
             x-for="(item, index) in newPlanForm.planExercises"
             :key="index"
           >
             <div
-              style="
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-                align-items: center;
-                background: #f0f0f0;
-                padding: 10px;
-                border-radius: 4px;
-              "
+              class="flex flex-wrap gap-3 items-center bg-gray-100 p-3 rounded-md border border-gray-200"
             >
-              <select x-model="item.exerciseId" required style="padding: 6px">
+              <select
+                x-model="item.exerciseId"
+                required
+                class="p-1.5 border border-gray-300 rounded bg-white text-sm focus:ring-1 focus:ring-green-500 outline-none"
+              >
                 <option value="" disabled selected>
                   -- Select Exercise Target --
                 </option>
@@ -88,50 +68,49 @@
                 </template>
               </select>
 
-              <label
-                >Weight:
+              <label class="text-sm text-gray-700 flex items-center gap-1">
+                Weight:
                 <input
                   type="number"
                   x-model.number="item.weight"
-                  style="width: 60px; padding: 4px"
+                  class="w-16 p-1 border border-gray-300 rounded text-center"
                 />
-                kg</label
-              >
-              <label
-                >Sets:
+                kg
+              </label>
+
+              <label class="text-sm text-gray-700 flex items-center gap-1">
+                Sets:
                 <input
                   type="number"
                   x-model.number="item.sets"
                   required
-                  style="width: 50px; padding: 4px"
-              /></label>
-              <label
-                >Reps:
+                  class="w-12 p-1 border border-gray-300 rounded text-center"
+                />
+              </label>
+
+              <label class="text-sm text-gray-700 flex items-center gap-1">
+                Reps:
                 <input
                   type="number"
                   x-model.number="item.reps"
                   required
-                  style="width: 50px; padding: 4px"
-              /></label>
-              <label
-                >Period (mins):
+                  class="w-12 p-1 border border-gray-300 rounded text-center"
+                />
+              </label>
+
+              <label class="text-sm text-gray-700 flex items-center gap-1">
+                Period (mins):
                 <input
                   type="number"
                   x-model.number="item.period"
-                  style="width: 60px; padding: 4px"
-              /></label>
+                  class="w-16 p-1 border border-gray-300 rounded text-center"
+                />
+              </label>
 
               <button
                 type="button"
                 @click="removeFieldFromForm(index)"
-                style="
-                  background: #777;
-                  color: white;
-                  border: none;
-                  border-radius: 3px;
-                  padding: 4px 8px;
-                  cursor: pointer;
-                "
+                class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-2.5 py-1.5 rounded transition-colors duration-150 cursor-pointer ml-auto"
               >
                 Remove
               </button>
@@ -139,33 +118,17 @@
           </template>
         </div>
 
-        <div style="margin-top: 15px">
+        <div class="mt-4 flex gap-3">
           <button
             type="button"
             @click="addFieldToForm()"
-            style="
-              background: #007bff;
-              color: white;
-              border: none;
-              padding: 6px 12px;
-              border-radius: 4px;
-              cursor: pointer;
-              margin-right: 10px;
-            "
+            class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-2 rounded-md transition-colors duration-150 cursor-pointer"
           >
             + Add Additional Exercise
           </button>
           <button
             type="submit"
-            style="
-              background: #28a745;
-              color: white;
-              border: none;
-              padding: 6px 16px;
-              border-radius: 4px;
-              font-weight: bold;
-              cursor: pointer;
-            "
+            class="bg-green-600 hover:bg-green-700 text-white font-bold text-sm px-4 py-2 rounded-md transition-colors duration-150 cursor-pointer"
           >
             Save Plan Configuration
           </button>
@@ -173,189 +136,164 @@
       </form>
     </section>
 
-    <section style="margin-top: 40px">
-      <h3>📂 Your Registered Workout Plans</h3>
+    <section class="mt-10">
+      <h3 class="text-xl font-bold text-gray-900 mb-4">
+        📂 Your Registered Workout Plans
+      </h3>
 
-      <div style="display: flex; flex-direction: column; gap: 25px">
+      <div class="flex flex-col gap-6">
         <template x-for="plan in plans" :key="plan.id">
-          <div
-            style="
-              border: 1px solid #ccc;
-              padding: 20px;
-              border-radius: 8px;
-              background-color: #fafafa;
-            "
-          >
+          <div class="border border-gray-200 p-5 rounded-lg bg-white shadow-sm">
             <template x-if="editingPlanId === plan.id">
-              <div style="margin-bottom: 12px">
-                <label
-                  ><b>Modify Plan Title:</b>
-                  <input
-                    type="text"
-                    x-model="editForm.title"
-                    style="padding: 6px; width: 320px; font-size: 1em"
-                  />
+              <div class="mb-3">
+                <label class="text-sm block font-medium text-gray-700 mb-1">
+                  <b>Modify Plan Title:</b>
                 </label>
+                <input
+                  type="text"
+                  x-model="editForm.title"
+                  class="p-1.5 w-full max-w-sm text-base border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-400 outline-none"
+                />
               </div>
             </template>
             <template x-if="editingPlanId !== plan.id">
               <h4
-                style="margin: 0 0 5px 0; color: #111; font-size: 1.25em"
+                class="text-lg font-bold text-gray-900 mb-1"
                 x-text="plan.title"
               ></h4>
             </template>
 
             <small
-              style="
-                color: #666;
-                font-family: monospace;
-                display: block;
-                margin-bottom: 15px;
-              "
+              class="text-xs text-gray-500 font-mono block mb-4"
               x-text="'System Hash ID: ' + plan.id"
             ></small>
 
-            <table
-              border="1"
-              cellpadding="8"
-              style="
-                border-collapse: collapse;
-                background: white;
-                width: 100%;
-                border-color: #ddd;
-              "
-            >
-              <thead>
-                <tr style="background: #f4f4f4; text-align: left">
-                  <th>Exercise Name</th>
-                  <th>Category</th>
-                  <th>Target Tool</th>
-                  <th>Weight Load</th>
-                  <th>Target Sets</th>
-                  <th>Target Reps</th>
-                  <th>Target Period</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template x-for="(ex, idx) in plan.planExercise" :key="ex.id">
-                  <tr>
-                    <td
-                      x-text="ex.exercise ? ex.exercise.name : 'Unknown'"
-                      style="font-weight: bold"
-                    ></td>
-                    <td x-text="ex.exercise?.category?.name || 'N/A'"></td>
-                    <td
-                      x-text="ex.exercise?.tool?.name || 'None'"
-                      style="font-style: italic; color: #555"
-                    ></td>
-
-                    <template x-if="editingPlanId === plan.id">
-                      <td style="background: #fffdf3">
-                        <input
-                          type="number"
-                          x-model.number="editForm.planExercises[idx].weight"
-                          style="width: 55px"
-                        />
-                        kg
-                      </td>
-                    </template>
-                    <template x-if="editingPlanId !== plan.id">
-                      <td x-text="ex.weight ? ex.weight + ' kg' : 'None'"></td>
-                    </template>
-
-                    <template x-if="editingPlanId === plan.id">
-                      <td style="background: #fffdf3">
-                        <input
-                          type="number"
-                          x-model.number="editForm.planExercises[idx].sets"
-                          style="width: 45px"
-                        />
-                      </td>
-                    </template>
-                    <template x-if="editingPlanId !== plan.id">
-                      <td x-text="ex.sets"></td>
-                    </template>
-
-                    <template x-if="editingPlanId === plan.id">
-                      <td style="background: #fffdf3">
-                        <input
-                          type="number"
-                          x-model.number="editForm.planExercises[idx].reps"
-                          style="width: 45px"
-                        />
-                      </td>
-                    </template>
-                    <template x-if="editingPlanId !== plan.id">
-                      <td x-text="ex.reps"></td>
-                    </template>
-
-                    <template x-if="editingPlanId === plan.id">
-                      <td style="background: #fffdf3">
-                        <input
-                          type="number"
-                          x-model.number="editForm.planExercises[idx].period"
-                          style="width: 45px"
-                        />
-                      </td>
-                    </template>
-                    <template x-if="editingPlanId !== plan.id">
-                      <td x-text="ex.period ? ex.period + ' mins' : '-'"></td>
-                    </template>
+            <div class="overflow-x-auto">
+              <table
+                class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-md bg-white"
+              >
+                <thead>
+                  <tr
+                    class="bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  >
+                    <th class="px-4 py-2.5">Exercise Name</th>
+                    <th class="px-4 py-2.5">Category</th>
+                    <th class="px-4 py-2.5">Target Tool</th>
+                    <th class="px-4 py-2.5">Weight Load</th>
+                    <th class="px-4 py-2.5">Target Sets</th>
+                    <th class="px-4 py-2.5">Target Reps</th>
+                    <th class="px-4 py-2.5">Target Period</th>
                   </tr>
-                </template>
-              </tbody>
-            </table>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+                  <template x-for="(ex, idx) in plan.planExercise" :key="ex.id">
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                      <td
+                        class="px-4 py-3 font-bold text-gray-900"
+                        x-text="ex.exercise ? ex.exercise.name : 'Unknown'"
+                      ></td>
+                      <td
+                        class="px-4 py-3 text-gray-500"
+                        x-text="ex.exercise?.category?.name || 'N/A'"
+                      ></td>
+                      <td
+                        class="px-4 py-3 italic text-gray-400"
+                        x-text="ex.exercise?.tool?.name || 'None'"
+                      ></td>
 
-            <div
-              style="
-                margin-top: 15px;
-                display: flex;
-                justify-content: space-between;
-              "
-            >
+                      <td
+                        :class="editingPlanId === plan.id ? 'px-4 py-2 bg-yellow-50/40' : 'px-4 py-3'"
+                      >
+                        <template x-if="editingPlanId === plan.id">
+                          <div class="flex items-center gap-1">
+                            <input
+                              type="number"
+                              x-model.number="editForm.planExercises[idx].weight"
+                              class="w-14 p-1 border border-gray-300 rounded text-center bg-white"
+                            />
+                            <span class="text-xs text-gray-500">kg</span>
+                          </div>
+                        </template>
+                        <template x-if="editingPlanId !== plan.id">
+                          <span
+                            x-text="ex.weight ? ex.weight + ' kg' : 'None'"
+                          ></span>
+                        </template>
+                      </td>
+
+                      <td
+                        :class="editingPlanId === plan.id ? 'px-4 py-2 bg-yellow-50/40' : 'px-4 py-3'"
+                      >
+                        <template x-if="editingPlanId === plan.id">
+                          <input
+                            type="number"
+                            x-model.number="editForm.planExercises[idx].sets"
+                            class="w-12 p-1 border border-gray-300 rounded text-center bg-white"
+                          />
+                        </template>
+                        <template x-if="editingPlanId !== plan.id">
+                          <span x-text="ex.sets"></span>
+                        </template>
+                      </td>
+
+                      <td
+                        :class="editingPlanId === plan.id ? 'px-4 py-2 bg-yellow-50/40' : 'px-4 py-3'"
+                      >
+                        <template x-if="editingPlanId === plan.id">
+                          <input
+                            type="number"
+                            x-model.number="editForm.planExercises[idx].reps"
+                            class="w-12 p-1 border border-gray-300 rounded text-center bg-white"
+                          />
+                        </template>
+                        <template x-if="editingPlanId !== plan.id">
+                          <span x-text="ex.reps"></span>
+                        </template>
+                      </td>
+
+                      <td
+                        :class="editingPlanId === plan.id ? 'px-4 py-2 bg-yellow-50/40' : 'px-4 py-3'"
+                      >
+                        <template x-if="editingPlanId === plan.id">
+                          <input
+                            type="number"
+                            x-model.number="editForm.planExercises[idx].period"
+                            class="w-12 p-1 border border-gray-300 rounded text-center bg-white"
+                          />
+                        </template>
+                        <template x-if="editingPlanId !== plan.id">
+                          <span
+                            x-text="ex.period ? ex.period + ' mins' : '-'"
+                          ></span>
+                        </template>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center">
               <div>
                 <template x-if="editingPlanId !== plan.id">
                   <button
                     @click="openInlineEditor(plan)"
-                    style="
-                      background: #ffc107;
-                      color: black;
-                      border: none;
-                      padding: 6px 12px;
-                      border-radius: 4px;
-                      cursor: pointer;
-                    "
+                    class="bg-amber-400 hover:bg-amber-500 text-gray-900 font-medium text-sm px-3 py-1.5 rounded shadow-sm transition-colors cursor-pointer"
                   >
                     ✏️ Edit Configurations
                   </button>
                 </template>
                 <template x-if="editingPlanId === plan.id">
-                  <div>
+                  <div class="flex gap-1.5">
                     <button
                       @click="savePlanUpdate()"
-                      style="
-                        background: #28a745;
-                        color: white;
-                        border: none;
-                        padding: 6px 12px;
-                        border-radius: 4px;
-                        font-weight: bold;
-                        cursor: pointer;
-                        margin-right: 5px;
-                      "
+                      class="bg-green-600 hover:bg-green-700 text-white font-bold text-sm px-3 py-1.5 rounded shadow-sm transition-colors cursor-pointer"
                     >
                       💾 Commit Changes
                     </button>
                     <button
                       @click="closeInlineEditor()"
-                      style="
-                        background: #6c757d;
-                        color: white;
-                        border: none;
-                        padding: 6px 12px;
-                        border-radius: 4px;
-                        cursor: pointer;
-                      "
+                      class="bg-gray-500 hover:bg-gray-600 text-white text-sm px-3 py-1.5 rounded shadow-sm transition-colors cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -365,14 +303,7 @@
 
               <button
                 @click="deletePlanRecord(plan.id)"
-                style="
-                  background: #dc3545;
-                  color: white;
-                  border: none;
-                  padding: 6px 12px;
-                  border-radius: 4px;
-                  cursor: pointer;
-                "
+                class="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1.5 rounded shadow-sm transition-colors cursor-pointer"
               >
                 🗑️ Delete Whole Plan
               </button>
@@ -382,7 +313,7 @@
       </div>
 
       <template x-if="plans.length === 0">
-        <p style="color: #666; font-style: italic; margin-top: 20px">
+        <p class="text-gray-500 italic mt-5">
           No workout execution plans found on profile storage.
         </p>
       </template>

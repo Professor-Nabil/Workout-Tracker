@@ -3,32 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <title>Workout Tracker - Gateway</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="/tailwind.min.js"></script>
     <script defer src="/storage.service.js"></script>
     <script defer src="/auth.js"></script>
     <script defer src="/alpine.min.js"></script>
   </head>
   <body
     x-data="authGateway"
-    style="
-      font-family: sans-serif;
-      max-width: 450px;
-      margin: 40px auto;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: #fafafa;
-    "
+    class="bg-gray-50 font-sans max-w-md mx-auto my-10 p-6 border border-gray-200 rounded-lg shadow-sm"
   >
-    <div style="display: flex; gap: 10px; margin-bottom: 20px">
+    <div class="flex gap-2.5 mb-5">
       <button
         @click="isLoginTab = true"
-        :style="isLoginTab ? 'font-weight: bold; background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px;' : 'padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;'"
+        :class="isLoginTab ? 'font-bold bg-blue-600 text-white px-4 py-2 rounded border border-transparent' : 'px-4 py-2 border border-gray-300 rounded text-gray-700 bg-white hover:bg-gray-50 cursor-pointer'"
       >
         Login
       </button>
       <button
         @click="isLoginTab = false"
-        :style="!isLoginTab ? 'font-weight: bold; background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px;' : 'padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;'"
+        :class="!isLoginTab ? 'font-bold bg-blue-600 text-white px-4 py-2 rounded border border-transparent' : 'px-4 py-2 border border-gray-300 rounded text-gray-700 bg-white hover:bg-gray-50 cursor-pointer'"
       >
         Create Account
       </button>
@@ -36,46 +30,44 @@
 
     <template x-if="banner.text">
       <div
-        :style="'padding: 10px; margin-bottom: 15px; border-radius: 4px; color: white; background-color: ' + (banner.isError ? '#dc3545' : '#28a745')"
+        :class="'p-3 mb-4 rounded text-white ' + (banner.isError ? 'bg-red-600' : 'bg-green-600')"
         x-text="banner.text"
       ></div>
     </template>
 
     <form @submit.prevent="handleSubmit()">
-      <h3 x-text="isLoginTab ? 'Welcome Back' : 'Register New Account'"></h3>
+      <h3
+        class="text-xl font-bold text-gray-800 mb-4"
+        x-text="isLoginTab ? 'Welcome Back' : 'Register New Account'"
+      ></h3>
 
-      <div style="margin-bottom: 12px">
-        <label style="display: block; margin-bottom: 4px">Email Address:</label>
+      <div class="mb-3">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Email Address:</label
+        >
         <input
           type="email"
           x-model="formData.email"
           required
-          style="width: 100%; padding: 8px; box-sizing: border-box"
+          class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
         />
       </div>
 
-      <div style="margin-bottom: 20px">
-        <label style="display: block; margin-bottom: 4px">Password:</label>
+      <div class="mb-5">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Password:</label
+        >
         <input
           type="password"
           x-model="formData.password"
           required
-          style="width: 100%; padding: 8px; box-sizing: border-box"
+          class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
         />
       </div>
 
       <button
         type="submit"
-        style="
-          width: 100%;
-          padding: 10px;
-          background: #28a745;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          font-size: 1em;
-          cursor: pointer;
-        "
+        class="w-full p-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow text-base transition-colors duration-200 cursor-pointer"
         x-text="isLoginTab ? 'Sign In' : 'Sign Up'"
       ></button>
     </form>
