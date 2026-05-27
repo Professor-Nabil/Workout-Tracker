@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Workout Hub Dashboard</title>
+    <script defer src="/storage.service.js"></script>
+    <script defer src="/dashboard.js"></script>
+    <script defer src="/alpine.min.js"></script>
+  </head>
+  <body
+    x-data="dashboardController"
+    style="
+      font-family: sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 15px;
+    "
+  >
+    <header
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      "
+    >
+      <h2>💪 Workout Hub Control Center</h2>
+      <button
+        @click="logout()"
+        style="
+          background: #dc3545;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+        "
+      >
+        Secure Logout
+      </button>
+    </header>
+
+    <section
+      style="
+        margin: 25px 0;
+        padding: 20px;
+        border: 1px dashed #28a745;
+        border-radius: 6px;
+        background: #fdfdfd;
+      "
+    >
+      <h3>🆕 Design a New Training Plan</h3>
+      <form @submit.prevent="createNewPlan()">
+        <div style="margin-bottom: 15px">
+          <input
+            type="text"
+            x-model="newPlanForm.title"
+            placeholder="Plan Title (e.g. Hypertrophy Push Day)"
+            required
+            style="width: 300px; padding: 8px; font-size: 1em"
+          />
+        </div>
+
+        <h5>Assigned Exercises</h5>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <template
+            x-for="(item, index) in newPlanForm.planExercises"
+            :key="index"
+          >
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+                background: #f0f0f0;
+                padding: 10px;
+                border-radius: 4px;
+              "
+            >
+              <select x-model="item.exerciseId" required style="padding: 6px">
+                <option value="" disabled selected>
+                  -- Select Exercise Target --
+                </option>
+                <template x-for="ex in availableExercises" :key="ex.id">
+                  <option :value="ex.id" x-text="ex.name"></option>
+                </template>
+              </select>
+
+              <label
+                >Weight:
+                <input
+                  type="number"
+                  x-model.number="item.weight"
+                  style="width: 60px; padding: 4px"
+                />
+                kg</label
+              >
+              <label
+                >Sets:
+                <input
+                  type="number"
+                  x-model.number="item.sets"
+                  required
+                  style="width: 50px; padding: 4px"
+              /></label>
+              <label
+                >Reps:
+                <input
+                  type="number"
+                  x-model.number="item.reps"
+                  required
+                  style="width: 50px; padding: 4px"
+              /></label>
+              <label
+                >Period (mins):
+                <input
+                  type="number"
+                  x-model.number="item.period"
+                  style="width: 60px; padding: 4px"
+              /></label>
+
+              <button
+                type="button"
+                @click="removeFieldFromForm(index)"
+                style="
+                  background: #777;
+                  color: white;
+                  border: none;
+                  border-radius: 3px;
+                  padding: 4px 8px;
+                  cursor: pointer;
+                "
+              >
+                Remove
+              </button>
+            </div>
+          </template>
+        </div>
+
+        <div style="margin-top: 15px">
+          <button
+            type="button"
+            @click="addFieldToForm()"
+            style="
+              background: #007bff;
+              color: white;
+              border: none;
+              padding: 6px 12px;
+              border-radius: 4px;
+              cursor: pointer;
+              margin-right: 10px;
+            "
+          >
+            + Add Additional Exercise
+          </button>
+          <button
+            type="submit"
+            style="
+              background: #28a745;
+              color: white;
+              border: none;
+              padding: 6px 16px;
+              border-radius: 4px;
+              font-weight: bold;
+              cursor: pointer;
+            "
+          >
+            Save Plan Configuration
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section style="margin-top: 40px">
+      <h3>📂 Your Registered Workout Plans</h3>
+
+      <div style="display: flex; flex-direction: column; gap: 25px">
+        <template x-for="plan in plans" :key="plan.id">
+          <div
+            style="
+              border: 1px solid #ccc;
+              padding: 20px;
+              border-radius: 8px;
+              background-color: #fafafa;
+            "
+          >
+            <template x-if="editingPlanId === plan.id">
+              <div style="margin-bottom: 12px">
+                <label
+                  ><b>Modify Plan Title:</b>
+                  <input
+                    type="text"
+                    x-model="editForm.title"
+                    style="padding: 6px; width: 320px; font-size: 1em"
+                  />
+                </label>
+              </div>
+            </template>
+            <template x-if="editingPlanId !== plan.id">
+              <h4
+                style="margin: 0 0 5px 0; color: #111; font-size: 1.25em"
+                x-text="plan.title"
+              ></h4>
+            </template>
+
+            <small
+              style="
+                color: #666;
+                font-family: monospace;
+                display: block;
+                margin-bottom: 15px;
+              "
+              x-text="'System Hash ID: ' + plan.id"
+            ></small>
+
+            <table
+              border="1"
+              cellpadding="8"
+              style="
+                border-collapse: collapse;
+                background: white;
+                width: 100%;
+                border-color: #ddd;
+              "
+            >
+              <thead>
+                <tr style="background: #f4f4f4; text-align: left">
+                  <th>Exercise Name</th>
+                  <th>Category</th>
+                  <th>Target Tool</th>
+                  <th>Weight Load</th>
+                  <th>Target Sets</th>
+                  <th>Target Reps</th>
+                  <th>Target Period</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-for="(ex, idx) in plan.planExercise" :key="ex.id">
+                  <tr>
+                    <td
+                      x-text="ex.exercise ? ex.exercise.name : 'Unknown'"
+                      style="font-weight: bold"
+                    ></td>
+                    <td x-text="ex.exercise?.category?.name || 'N/A'"></td>
+                    <td
+                      x-text="ex.exercise?.tool?.name || 'None'"
+                      style="font-style: italic; color: #555"
+                    ></td>
+
+                    <template x-if="editingPlanId === plan.id">
+                      <td style="background: #fffdf3">
+                        <input
+                          type="number"
+                          x-model.number="editForm.planExercises[idx].weight"
+                          style="width: 55px"
+                        />
+                        kg
+                      </td>
+                    </template>
+                    <template x-if="editingPlanId !== plan.id">
+                      <td x-text="ex.weight ? ex.weight + ' kg' : 'None'"></td>
+                    </template>
+
+                    <template x-if="editingPlanId === plan.id">
+                      <td style="background: #fffdf3">
+                        <input
+                          type="number"
+                          x-model.number="editForm.planExercises[idx].sets"
+                          style="width: 45px"
+                        />
+                      </td>
+                    </template>
+                    <template x-if="editingPlanId !== plan.id">
+                      <td x-text="ex.sets"></td>
+                    </template>
+
+                    <template x-if="editingPlanId === plan.id">
+                      <td style="background: #fffdf3">
+                        <input
+                          type="number"
+                          x-model.number="editForm.planExercises[idx].reps"
+                          style="width: 45px"
+                        />
+                      </td>
+                    </template>
+                    <template x-if="editingPlanId !== plan.id">
+                      <td x-text="ex.reps"></td>
+                    </template>
+
+                    <template x-if="editingPlanId === plan.id">
+                      <td style="background: #fffdf3">
+                        <input
+                          type="number"
+                          x-model.number="editForm.planExercises[idx].period"
+                          style="width: 45px"
+                        />
+                      </td>
+                    </template>
+                    <template x-if="editingPlanId !== plan.id">
+                      <td x-text="ex.period ? ex.period + ' mins' : '-'"></td>
+                    </template>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+
+            <div
+              style="
+                margin-top: 15px;
+                display: flex;
+                justify-content: space-between;
+              "
+            >
+              <div>
+                <template x-if="editingPlanId !== plan.id">
+                  <button
+                    @click="openInlineEditor(plan)"
+                    style="
+                      background: #ffc107;
+                      color: black;
+                      border: none;
+                      padding: 6px 12px;
+                      border-radius: 4px;
+                      cursor: pointer;
+                    "
+                  >
+                    ✏️ Edit Configurations
+                  </button>
+                </template>
+                <template x-if="editingPlanId === plan.id">
+                  <div>
+                    <button
+                      @click="savePlanUpdate()"
+                      style="
+                        background: #28a745;
+                        color: white;
+                        border: none;
+                        padding: 6px 12px;
+                        border-radius: 4px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        margin-right: 5px;
+                      "
+                    >
+                      💾 Commit Changes
+                    </button>
+                    <button
+                      @click="closeInlineEditor()"
+                      style="
+                        background: #6c757d;
+                        color: white;
+                        border: none;
+                        padding: 6px 12px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                      "
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <button
+                @click="deletePlanRecord(plan.id)"
+                style="
+                  background: #dc3545;
+                  color: white;
+                  border: none;
+                  padding: 6px 12px;
+                  border-radius: 4px;
+                  cursor: pointer;
+                "
+              >
+                🗑️ Delete Whole Plan
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <template x-if="plans.length === 0">
+        <p style="color: #666; font-style: italic; margin-top: 20px">
+          No workout execution plans found on profile storage.
+        </p>
+      </template>
+    </section>
+  </body>
+</html>

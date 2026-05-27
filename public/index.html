@@ -2,24 +2,82 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Home Page</title>
-    <script defer src="/index.js"></script>
+    <title>Workout Tracker - Gateway</title>
+    <script defer src="/storage.service.js"></script>
+    <script defer src="/auth.js"></script>
     <script defer src="/alpine.min.js"></script>
   </head>
-  <body x-data="alpineData">
-    <li><a href="/auth/signup/signup.html">Signup</a></li>
-    <li><a href="/auth/login/login.html">Login</a></li>
-    <li><a href="/auth/refresh/refresh.html">Refresh</a></li>
-    <li><a href="/auth/logout/logout.html">Logout</a></li>
-    <hr />
-    <li><a href="/plans/create-plan/create.html">Create Plan</a></li>
-
-    <li>
-      <a href="/plans/read-all-plans/read-all-plans.html"
-        >Read all plans for one user</a
+  <body
+    x-data="authGateway"
+    style="
+      font-family: sans-serif;
+      max-width: 450px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+    "
+  >
+    <div style="display: flex; gap: 10px; margin-bottom: 20px">
+      <button
+        @click="isLoginTab = true"
+        :style="isLoginTab ? 'font-weight: bold; background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px;' : 'padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;'"
       >
-    </li>
-    <li><a href="/plans/update-plan/update-plan.html">Update Plans</a></li>
-    <li><a href="/plans/delete-plan/delete-plan.html">Delete Plans</a></li>
+        Login
+      </button>
+      <button
+        @click="isLoginTab = false"
+        :style="!isLoginTab ? 'font-weight: bold; background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px;' : 'padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;'"
+      >
+        Create Account
+      </button>
+    </div>
+
+    <template x-if="banner.text">
+      <div
+        :style="'padding: 10px; margin-bottom: 15px; border-radius: 4px; color: white; background-color: ' + (banner.isError ? '#dc3545' : '#28a745')"
+        x-text="banner.text"
+      ></div>
+    </template>
+
+    <form @submit.prevent="handleSubmit()">
+      <h3 x-text="isLoginTab ? 'Welcome Back' : 'Register New Account'"></h3>
+
+      <div style="margin-bottom: 12px">
+        <label style="display: block; margin-bottom: 4px">Email Address:</label>
+        <input
+          type="email"
+          x-model="formData.email"
+          required
+          style="width: 100%; padding: 8px; box-sizing: border-box"
+        />
+      </div>
+
+      <div style="margin-bottom: 20px">
+        <label style="display: block; margin-bottom: 4px">Password:</label>
+        <input
+          type="password"
+          x-model="formData.password"
+          required
+          style="width: 100%; padding: 8px; box-sizing: border-box"
+        />
+      </div>
+
+      <button
+        type="submit"
+        style="
+          width: 100%;
+          padding: 10px;
+          background: #28a745;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-size: 1em;
+          cursor: pointer;
+        "
+        x-text="isLoginTab ? 'Sign In' : 'Sign Up'"
+      ></button>
+    </form>
   </body>
 </html>

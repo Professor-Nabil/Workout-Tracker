@@ -1,16 +1,14 @@
-const dbNmae = "GciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+const dbName = "GciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
 
 function saveTokens(accessToken, refreshToken) {
-  localStorage.setItem(
-    this.dbNmae,
-    JSON.stringify({ accessToken, refreshToken }),
-  );
+  localStorage.setItem(dbName, JSON.stringify({ accessToken, refreshToken }));
 }
 
 function readTokens() {
-  return JSON.parse(localStorage.getItem(this.dbNmae)) || "";
+  const data = localStorage.getItem(dbName);
+  return data ? JSON.parse(data) : null;
 }
 
 function deleteTokens() {
-  return localStorage.removeItem(this.dbNmae) || "";
+  localStorage.removeItem(dbName);
 }
