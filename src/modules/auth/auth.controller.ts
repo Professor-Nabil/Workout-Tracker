@@ -45,6 +45,14 @@ export const loginController = async (
       email,
       password,
     );
+
+    // -------------------------------------------------------------
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true, // Protects against XSS attacks
+      secure: process.env.NODE_ENV === "production", // Requires HTTPS in production
+      sameSite: "strict", // Protects against CSRF attacks
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration matching your JWT config
+    });
     // -------------------------------------------------------------
     const body = {
       message: "Success login",
@@ -54,7 +62,7 @@ export const loginController = async (
           email: user.email,
         },
         accessToken,
-        refreshToken,
+        // refreshToken,
       },
     };
     // -------------------------------------------------------------
@@ -72,17 +80,26 @@ export const refreshController = async (
 ) => {
   try {
     // -------------------------------------------------------------
-    const incommingRefreshToken = req.body.refreshToken;
+    const incommingRefreshToken = req.cookies.refreshToken;
+    if (!incommingRefreshToken) {
+      return res.status(401).json({ message: "Refresh token missing" });
+    }
     // -------------------------------------------------------------
     const { accessToken, refreshToken } = await refreshService(
       incommingRefreshToken,
     );
     // -------------------------------------------------------------
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true, // Protects against XSS attacks
+      secure: process.env.NODE_ENV === "production", // Requires HTTPS in production
+      sameSite: "strict", // Protects against CSRF attacks
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration matching your JWT config
+    });
+    // -------------------------------------------------------------
     const body = {
       message: "Success refreshToken",
       data: {
         accessToken,
-        refreshToken,
       },
     };
     // -------------------------------------------------------------
@@ -99,8 +116,17 @@ export const logoutController = async (
   next: NextFunction,
 ) => {
   try {
-    const incommingRefreshToken = req.body.refreshToken;
-    await logoutService(incommingRefreshToken);
+    const incomingRefreshToken = req.cookies?.refreshToken;
+
+    if (incomingRefreshToken) {
+      await logoutService(incomingRefreshToken);
+    }
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
     res.sendStatus(204);
   } catch (err) {

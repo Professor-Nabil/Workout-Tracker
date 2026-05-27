@@ -3,8 +3,8 @@ import env from "../../../../lib/env.schema.js";
 import crypto from "crypto";
 
 // Tokens life
-const accessLife = 1000 * 60 * 15;
-const refreshLife = 1000 * 60 * 60 * 24 * 7;
+const accessLife = 1000 * 60 * 15; // BUG:
+const refreshLife = 1000 * 60 * 60 * 24 * 7; // BUG:
 const accessSecret = env.JWT_ACCESS_SECRET;
 const refreshSecret = env.JWT_REFRESH_SECRET;
 
