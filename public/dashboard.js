@@ -16,24 +16,25 @@ document.addEventListener("alpine:init", () => {
     editForm: { title: "", planExercises: [] },
 
     async init() {
-      // Security Interceptor Check
-      if (!readTokens()?.accessToken) {
-        window.location.href = "/index.html";
+      // Direct pass out if access token isn't even present locally
+      if (!readAccessToken()) {
+        // window.location.href = "/index.html";
         return;
       }
+
+      // Parallel loading of structural and transactional data rows
       await Promise.all([this.fetchExerciseDatabase(), this.fetchUserPlans()]);
     },
 
     async fetchExerciseDatabase() {
-      const res = await fetch("/api/exercises");
+      // Public or protected endpoint, secureFetch handles it safely
+      const res = await secureFetch("/api/exercises");
       const result = await res.json();
       if (res.ok) this.availableExercises = result.data.exercises;
     },
 
     async fetchUserPlans() {
-      const res = await fetch("/api/plans", {
-        headers: { Authorization: `Bearer ${readTokens().accessToken}` },
-      });
+      const res = await secureFetch("/api/plans");
       const result = await res.json();
       if (res.ok) this.plans = result.data.plans;
     },
@@ -48,15 +49,16 @@ document.addEventListener("alpine:init", () => {
         period: 20,
       });
     },
+
     removeFieldFromForm(idx) {
       this.newPlanForm.planExercises.splice(idx, 1);
     },
+
     async createNewPlan() {
-      const res = await fetch("/api/plans", {
+      const res = await secureFetch("/api/plans", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${readTokens().accessToken}`,
         },
         body: JSON.stringify(this.newPlanForm),
       });
@@ -68,7 +70,7 @@ document.addEventListener("alpine:init", () => {
             { exerciseId: "", weight: 60, sets: 3, reps: 10, period: 20 },
           ],
         };
-        await this.fetchUserPlans(); // Live state reload
+        await this.fetchUserPlans(); // Live UI state sync
       }
     },
 
@@ -84,9 +86,11 @@ document.addEventListener("alpine:init", () => {
         reps: ex.reps,
       }));
     },
+
     closeInlineEditor() {
       this.editingPlanId = null;
     },
+
     async savePlanUpdate() {
       const sanitizedPayload = {
         title: this.editForm.title,
@@ -99,11 +103,10 @@ document.addEventListener("alpine:init", () => {
         })),
       };
 
-      const res = await fetch(`/api/plans/${this.editingPlanId}`, {
+      const res = await secureFetch(`/api/plans/${this.editingPlanId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${readTokens().accessToken}`,
         },
         body: JSON.stringify(sanitizedPayload),
       });
@@ -118,28 +121,28 @@ document.addEventListener("alpine:init", () => {
     async deletePlanRecord(id) {
       if (!confirm("Are you sure you want to drop this workout plan?")) return;
 
-      const res = await fetch(`/api/plans/${id}`, {
+      const res = await secureFetch(`/api/plans/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${readTokens().accessToken}` },
       });
 
       if (res.status === 204) {
-        this.plans = this.plans.filter((p) => p.id !== id); // Optimistic layout drop
+        this.plans = this.plans.filter((p) => p.id !== id); // Optimistic layout purge
       }
     },
 
     // --- LOGOUT REFACTOR ---
     async logout() {
       try {
-        await fetch("/api/auth/logout", {
+        // The backend automatically deletes the server-side session and cookies.
+        await secureFetch("/api/auth/logout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refreshToken: readTokens()?.refreshToken }),
         });
       } catch (err) {
         console.error("Logout handshake error:", err);
       } finally {
-        deleteTokens();
+        // Clear local storage and bounce to login regardless of network results
+        // deleteAccessToken();
         window.location.href = "/index.html";
       }
     },

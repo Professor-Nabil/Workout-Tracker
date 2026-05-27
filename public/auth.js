@@ -6,7 +6,7 @@ document.addEventListener("alpine:init", () => {
 
     init() {
       // Direct pass to app dashboard if tokens already exist locally
-      if (readTokens()?.accessToken) {
+      if (readAccessToken()) {
         window.location.href = "/dashboard.html";
       }
     },
@@ -38,7 +38,7 @@ document.addEventListener("alpine:init", () => {
         }
 
         if (this.isLoginTab) {
-          saveTokens(result.data.accessToken, result.data.refreshToken);
+          saveAccessToken(result.data.accessToken);
           window.location.href = "/dashboard.html";
         } else {
           this.showAlert(
