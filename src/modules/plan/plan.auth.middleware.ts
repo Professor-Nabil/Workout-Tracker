@@ -50,15 +50,24 @@ export const planAuthMiddleware = async (
 
     next();
   } catch (err) {
+    // 1. Handle specialized Token Lifespan expirations cleanly
+    if (err instanceof jwt.TokenExpiredError) {
+      return next(new AppError("Session token has expired", 401));
+    }
+
+    // 2. Handle generic structural tamperings or bad signatures
     if (err instanceof jwt.JsonWebTokenError) {
-      // 5. Fixed standard 401 status target fallback error handling
-      next(new AppError("Invalid or expired session token", 401));
+      return next(new AppError("Invalid session token signature", 401));
     }
+
+    // 3. Handle schema configuration payload check failures
     if (err instanceof z.ZodError) {
-      err = new AppError("Invalid jwt payload", 401, err.issues);
-      next(err);
-    } else {
-      next(err);
+      return next(
+        new AppError("Invalid jwt payload configuration", 401, err.issues),
+      );
     }
+
+    // 4. Ultimate catch-all fallback for unexpected server execution drops
+    return next(err);
   }
 };

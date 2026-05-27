@@ -18,7 +18,7 @@ document.addEventListener("alpine:init", () => {
     async init() {
       // Direct pass out if access token isn't even present locally
       if (!readAccessToken()) {
-        // window.location.href = "/index.html";
+        window.location.href = "/index.html";
         return;
       }
 
@@ -142,7 +142,7 @@ document.addEventListener("alpine:init", () => {
         console.error("Logout handshake error:", err);
       } finally {
         // Clear local storage and bounce to login regardless of network results
-        // deleteAccessToken();
+        deleteAccessToken();
         window.location.href = "/index.html";
       }
     },

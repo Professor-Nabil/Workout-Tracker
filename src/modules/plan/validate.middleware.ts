@@ -14,10 +14,8 @@ export const planValidateMiddleware = async (
   } catch (err) {
     if (err instanceof z.ZodError) {
       err = new AppError("Invalid plan", 400, err.issues);
-      console.error(err);
       next(err);
     } else {
-      console.error(err);
       next(err);
     }
   }
@@ -34,10 +32,8 @@ export const planUpdateValidateMiddleware = async (
   } catch (err) {
     if (err instanceof z.ZodError) {
       err = new AppError("Invalid plan", 400, err.issues);
-      console.error(err);
       next(err);
     } else {
-      console.error(err);
       next(err);
     }
   }
