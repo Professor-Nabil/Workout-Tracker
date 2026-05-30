@@ -1,9 +1,8 @@
 import app from "./app.js";
-import { env } from "./lib/env.js";
-import logger from "./lib/logger.js";
+import env from "./lib/env.schema.js";
 
-const PORT = env.PORT;
+const port = env.PORT;
 
-app.listen(PORT, () => {
-  logger.info(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is listening op port ${port}`);
 });

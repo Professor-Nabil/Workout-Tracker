@@ -1,105 +1,113 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/client" // Recommended: Keep generated types in your src
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
 }
 
+// Parent of RefreshToken
+// Parent of Plan
 model User {
-  id            String            @id @default(uuid())
-  email         String            @unique
-  password      String
-  workouts      Workout[]
-  measurements  BodyMeasurement[]
-  refreshTokens RefreshToken[]
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  exercises     Exercise[]
+  // Basics
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  // Fields
+  email        String         @unique
+  hashPassword String
+  // Relations
+  refreshToken RefreshToken[]
+  plan         Plan[]
 }
 
+// Child of User
 model RefreshToken {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  expiresAt DateTime
-  isRevoked Boolean  @default(false)
-  createdAt DateTime @default(now())
+  // Basics
+  id               String   @id @default(uuid())
+  createdAt        DateTime @default(now())
+  // Fields
+  hashRefreshToken String   @unique
+  expiresAt        DateTime
+  // Relations
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
-model BodyMeasurement {
-  id     String   @id @default(uuid())
-  userId String
-  user   User     @relation(fields: [userId], references: [id])
-  weight Float
-  date   DateTime @default(now())
-  notes  String?
+// Child of User
+// Parent of PlanExercise
+model Plan {
+  // Basics
+  id           String         @id @default(uuid())
+  // Fields
+  title        String
+  // Relations
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planExercise PlanExercise[]
+
+  @@unique([title, userId])
+  @@index([userId])
 }
 
-model ExerciseCategory {
-  id        String     @id @default(uuid())
-  name      String     @unique
-  exercises Exercise[]
+// Child of Exercise
+// Child of Plan
+model PlanExercise {
+  // Basics
+  id         String   @id @default(uuid())
+  // Fields
+  weight     Int? // KG
+  period     Int? // Minutes
+  sets       Int?
+  reps       Int?
+  // Relations
+  planId     String
+  plan       Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
+  @@index([exerciseId])
 }
 
+// Child of Category
+// Child of Tool
+// Parent of PlanExercise
 model Exercise {
-  id           String            @id @default(uuid())
-  name         String
-  description  String?
-  isSystem     Boolean           @default(true) // Distinguish seed data from user-created
-  ownerId      String?
-  owner        User?             @relation(fields: [ownerId], references: [id])
+  // Basics
+  id           String         @id @default(uuid())
+  // Fields
+  name         String         @unique
+  // Relations
+  planExercise PlanExercise[]
   categoryId   String
-  category     ExerciseCategory  @relation(fields: [categoryId], references: [id])
-  muscleGroup  String?
-  workoutItems WorkoutExercise[]
+  category     Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  toolId       String?
+  tool         Tool?          @relation(fields: [toolId], references: [id], onDelete: SetNull) // Safely unlinks the tool without wiping the exercise configuration
+
+  @@index([categoryId])
+  @@index([toolId])
 }
 
-enum WorkoutStatus {
-  PLANNED
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
+// Parent of Exercise
+model Category {
+  // Basics
+  id       String     @id @default(uuid())
+  // Fields
+  name     String     @unique
+  // Relations
+  exercise Exercise[]
 }
 
-model Workout {
-  id          String            @id @default(uuid())
-  title       String
-  status      WorkoutStatus     @default(PLANNED)
-  scheduledAt DateTime
-  startedAt   DateTime?
-  endedAt     DateTime?
-  comments    String?
-  deletedAt   DateTime?
-  userId      String
-  user        User              @relation(fields: [userId], references: [id])
-  exercises   WorkoutExercise[]
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-
-  @@index([userId, scheduledAt])
-}
-
-enum WeightUnit {
-  KG
-  LBS
-}
-
-model WorkoutExercise {
-  id          String      @id @default(uuid())
-  workoutId   String
-  exerciseId  String
-  sequence    Int         @default(1) // Order of the set/exercise in the workout
-  sets        Int?
-  reps        Int?
-  weight      Float?
-  weightUnit  WeightUnit? @default(KG)
-  duration    Int? // Duration in minutes
-  isCompleted Boolean     @default(false)
-  workout     Workout     @relation(fields: [workoutId], references: [id])
-  exercise    Exercise    @relation(fields: [exerciseId], references: [id])
+// Parent of Exercise
+model Tool {
+  // Basics
+  id       String     @id @default(uuid())
+  // Fields
+  name     String     @unique
+  // Relations
+  exercise Exercise[]
 }
